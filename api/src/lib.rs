@@ -1,14 +1,24 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+use std::fmt;
+use std::num::NonZeroI32;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+use serde::Deserialize;
+use serde::Serialize;
+use serde_json as json;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub use error::Error;
+pub use error::ErrorCode;
+pub use transport::Request;
+pub use transport::Response;
+
+mod error;
+mod transport;
+
+pub trait SonyBraviaTvCommand {
+    const METHOD: &str;
+    const VERSION: &str;
+
+    type Params: Serialize;
+    type Response: for<'de> Deserialize<'de>;
+
+    fn params(&self) -> Option<Self::Params>;
 }
