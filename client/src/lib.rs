@@ -12,7 +12,6 @@ extern crate alloc;
 use alloc::format;
 use alloc::string::String;
 use alloc::vec::Vec;
-use core::error;
 use core::fmt;
 use core::marker::PhantomData;
 use core::num::NonZeroI32;
@@ -135,25 +134,26 @@ impl<C: SonyBraviaTvCommand> Pending<C> {
 }
 
 /// Failure while preparing or interpreting a request.
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 pub enum Error {
     /// This client has used every positive request ID.
     IdsExhausted,
     /// Command parameters could not be serialized.
-    Encode(serde_json::Error),
+    Encode(#[source] serde_json::Error),
     /// The response body or command-specific result was invalid.
-    Decode(serde_json::Error),
+    Decode(#[source] serde_json::Error),
     /// The response belongs to a different request.
     MismatchedId {
         expected: NonZeroI32,
         actual: NonZeroI32,
     },
     /// The display returned a REST API error with HTTP status 200.
-    Device(sony_bravia_api::Error),
+    Device(#[source] sony_bravia_api::Error),
     /// The server returned an HTTP status other than 200.
     Http {
         status: u16,
         body: Vec<u8>,
+        #[source]
         device_error: Option<sony_bravia_api::Error>,
     },
 }
@@ -175,20 +175,6 @@ impl fmt::Display for Error {
                 ..
             } => write!(f, "HTTP {status}: {error}"),
             Self::Http { status, .. } => write!(f, "HTTP {status}"),
-        }
-    }
-}
-
-impl error::Error for Error {
-    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
-        match self {
-            Self::Encode(error) | Self::Decode(error) => Some(error),
-            Self::Device(error)
-            | Self::Http {
-                device_error: Some(error),
-                ..
-            } => Some(error),
-            _ => None,
         }
     }
 }
@@ -252,6 +238,29 @@ mod tests {
             pending.complete(200, br#"{"id":1,"result":[]}"#),
             Err(Error::Decode(_))
         ));
+    }
+
+    #[test]
+    fn error_display_and_sources_are_preserved() {
+        use alloc::string::ToString;
+        use core::error::Error as _;
+
+        let pending = Client::new().prepare(GetPowerStatus).unwrap();
+        let body = br#"{"id":1,"error":[401,"Unauthorized"]}"#;
+        let device = pending.complete(200, body).unwrap_err();
+        assert_eq!(device.to_string(), "display error: Unauthorized");
+        assert_eq!(device.source().unwrap().to_string(), "Unauthorized");
+
+        let http = pending.complete(401, body).unwrap_err();
+        assert_eq!(http.to_string(), "HTTP 401: Unauthorized");
+        assert_eq!(http.source().unwrap().to_string(), "Unauthorized");
+
+        let http = pending.complete(503, b"unavailable").unwrap_err();
+        assert_eq!(http.to_string(), "HTTP 503");
+        assert!(http.source().is_none());
+
+        let decode = pending.complete(200, b"invalid").unwrap_err();
+        assert!(decode.source().is_some());
     }
 
     #[test]

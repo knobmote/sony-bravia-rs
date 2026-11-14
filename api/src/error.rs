@@ -1,6 +1,7 @@
 use super::*;
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, thiserror::Error)]
+#[error("{message}")]
 pub struct Error {
     pub code: ErrorCode,
     pub message: String,
@@ -9,26 +10,6 @@ pub struct Error {
 impl Error {
     pub fn from_json(text: &str) -> json::Result<Self> {
         json::from_str(text)
-    }
-}
-
-impl core::error::Error for Error {
-    fn source(&self) -> Option<&(dyn core::error::Error + 'static)> {
-        None
-    }
-
-    fn description(&self) -> &str {
-        "description() is deprecated; use Display"
-    }
-
-    fn cause(&self) -> Option<&dyn core::error::Error> {
-        self.source()
-    }
-}
-
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.message.fmt(f)
     }
 }
 
