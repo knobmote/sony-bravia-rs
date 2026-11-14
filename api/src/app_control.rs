@@ -2,6 +2,59 @@
 
 use super::*;
 
+/// Read the text in the active software keyboard using the v1.1 API.
+///
+/// An empty key requests unencrypted text. Sony's reference contains conflicting
+/// optionality guidance, so the key field is always sent.
+#[derive(Clone, Debug, Serialize)]
+pub struct GetTextForm {
+    #[serde(rename = "encKey")]
+    pub encryption_key: String,
+}
+
+#[derive(Clone, Debug, Deserialize, PartialEq, Eq)]
+pub struct TextForm {
+    pub text: String,
+}
+
+impl SonyBraviaTvCommand for GetTextForm {
+    const SERVICE: &str = "appControl";
+    const METHOD: &str = "getTextForm";
+    const VERSION: &str = "1.1";
+    type Params = Self;
+    type Response = TextForm;
+    fn params(&self) -> Option<Self::Params> {
+        Some(self.clone())
+    }
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        single(result)
+    }
+}
+
+/// Set software keyboard text using the v1.1 API.
+///
+/// When a key is supplied, `text` must already be encrypted as the device expects.
+#[derive(Clone, Debug, Serialize)]
+pub struct SetTextFormV1_1 {
+    #[serde(rename = "encKey")]
+    pub encryption_key: String,
+    pub text: String,
+}
+
+impl SonyBraviaTvCommand for SetTextFormV1_1 {
+    const SERVICE: &str = "appControl";
+    const METHOD: &str = "setTextForm";
+    const VERSION: &str = "1.1";
+    type Params = Self;
+    type Response = ();
+    fn params(&self) -> Option<Self::Params> {
+        Some(self.clone())
+    }
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        empty(result)
+    }
+}
+
 /// List launchable applications.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct GetApplicationList;

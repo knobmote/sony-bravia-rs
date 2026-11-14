@@ -27,6 +27,7 @@ pub use system::SetPowerStatus;
 pub use transport::Request;
 pub use transport::Response;
 
+pub mod access_control;
 pub mod app_control;
 pub mod audio;
 pub mod av_content;
@@ -53,6 +54,16 @@ pub trait SonyBraviaTvCommand {
     type Response: for<'de> Deserialize<'de>;
 
     fn params(&self) -> Option<Self::Params>;
+
+    /// Encode positional parameters. Most commands use zero or one parameter.
+    ///
+    /// Commands with multiple positional parameters can override this method.
+    fn encode_params(&self) -> json::Result<Vec<json::Value>> {
+        self.params()
+            .map(json::to_value)
+            .transpose()
+            .map(|params| params.map_or_default(|params| vec![params]))
+    }
 
     /// Decode the complete `result` array into the command's response.
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response>;

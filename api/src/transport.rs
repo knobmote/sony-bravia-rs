@@ -13,11 +13,7 @@ impl Request {
     where
         T: SonyBraviaTvCommand,
     {
-        let params = command
-            .params()
-            .map(json::to_value)
-            .transpose()?
-            .map_or_default(|params| vec![params]);
+        let params = command.encode_params()?;
         let request = Self {
             id,
             method: T::METHOD,

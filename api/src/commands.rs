@@ -354,6 +354,47 @@ mod tests {
     }
 
     #[test]
+    fn registration_and_text_form_use_advertised_parameter_shapes() {
+        check(
+            access_control::ActRegister {
+                client: access_control::RegistrationClient {
+                    client_id: "remote:123".into(),
+                    nickname: "Remote".into(),
+                    level: Some("private".into()),
+                },
+                functions: vec![access_control::RegistrationFunction {
+                    function: "WOL".into(),
+                    value: "yes".into(),
+                }],
+            },
+            "actRegister",
+            "1.0",
+            json::json!([{"clientid":"remote:123","nickname":"Remote","level":"private"},[{"function":"WOL","value":"yes"}]]),
+            json::json!([]),
+        );
+        let form = check(
+            app_control::GetTextForm {
+                encryption_key: "".into(),
+            },
+            "getTextForm",
+            "1.1",
+            json::json!([{"encKey":""}]),
+            json::json!([{"text":"hello"}]),
+        );
+        assert_eq!(form.text, "hello");
+        check(
+            app_control::SetTextFormV1_1 {
+                encryption_key: "".into(),
+                text: "hello".into(),
+            },
+            "setTextForm",
+            "1.1",
+            json::json!([{"encKey":"","text":"hello"}]),
+            json::json!([]),
+        );
+    }
+
+    #[test]
     fn discovery_system_and_video_shapes() {
         let services = check(
             guide::GetSupportedApiInfo::default(),
