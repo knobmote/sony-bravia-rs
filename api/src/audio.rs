@@ -2,6 +2,35 @@
 
 use super::*;
 
+/// Get sound settings, optionally filtering by a device-specific target.
+#[derive(Clone, Debug, Default, Serialize)]
+pub struct GetSoundSettings {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+}
+
+/// Current value of a sound setting.
+#[derive(Clone, Debug, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct SoundSetting {
+    pub target: String,
+    pub current_value: String,
+}
+
+impl SonyBraviaTvCommand for GetSoundSettings {
+    const SERVICE: &str = "audio";
+    const METHOD: &str = "getSoundSettings";
+    const VERSION: &str = "1.1";
+    type Params = Self;
+    type Response = Vec<SoundSetting>;
+    fn params(&self) -> Option<Self::Params> {
+        Some(self.clone())
+    }
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        single(result)
+    }
+}
+
 /// Read the volume and mute state for each output.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct GetVolumeInformation;

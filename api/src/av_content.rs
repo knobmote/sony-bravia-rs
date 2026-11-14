@@ -2,6 +2,59 @@
 
 use super::*;
 
+/// List the TV's favorite content sources, which are not necessarily apps.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct GetFavoriteList;
+
+#[derive(Clone, Debug, Deserialize, PartialEq, Eq)]
+pub struct FavoriteSource {
+    pub source: String,
+    pub label: String,
+}
+
+impl SonyBraviaTvCommand for GetFavoriteList {
+    const SERVICE: &str = "avContent";
+    const METHOD: &str = "getFavoriteList";
+    const VERSION: &str = "1.0";
+    type Params = ();
+    type Response = Vec<FavoriteSource>;
+    fn params(&self) -> Option<Self::Params> {
+        None
+    }
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        single(result)
+    }
+}
+
+/// Get the expanded external input status, including the device's status value.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct GetCurrentExternalInputsStatusV1_1;
+
+#[derive(Clone, Debug, Deserialize, PartialEq, Eq)]
+pub struct ExternalInputV1_1 {
+    pub uri: String,
+    pub title: String,
+    pub connection: bool,
+    pub label: String,
+    #[serde(default)]
+    pub icon: String,
+    pub status: Option<String>,
+}
+
+impl SonyBraviaTvCommand for GetCurrentExternalInputsStatusV1_1 {
+    const SERVICE: &str = "avContent";
+    const METHOD: &str = "getCurrentExternalInputsStatus";
+    const VERSION: &str = "1.1";
+    type Params = ();
+    type Response = Vec<ExternalInputV1_1>;
+    fn params(&self) -> Option<Self::Params> {
+        None
+    }
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        single(result)
+    }
+}
+
 /// Switch to a content or input URI obtained from the display.
 #[derive(Clone, Debug, Serialize)]
 pub struct SetPlayContent {

@@ -55,6 +55,14 @@ mod tests {
 
     #[test]
     fn audio_command_shapes_and_values() {
+        let sound = check(
+            audio::GetSoundSettings::default(),
+            "getSoundSettings",
+            "1.1",
+            json::json!([{}]),
+            json::json!([[{"target":"outputTerminal","currentValue":"speaker"}]]),
+        );
+        assert_eq!(sound[0].current_value, "speaker");
         let volumes = check(
             audio::GetVolumeInformation,
             "getVolumeInformation",
@@ -132,6 +140,22 @@ mod tests {
 
     #[test]
     fn input_and_application_shapes() {
+        let favorites = check(
+            av_content::GetFavoriteList,
+            "getFavoriteList",
+            "1.0",
+            json::json!([]),
+            json::json!([[{"source":"fav:1","label":"Favorites"}]]),
+        );
+        assert_eq!(favorites[0].source, "fav:1");
+        let inputs_v11 = check(
+            av_content::GetCurrentExternalInputsStatusV1_1,
+            "getCurrentExternalInputsStatus",
+            "1.1",
+            json::json!([]),
+            json::json!([[{"uri":"extInput:hdmi?port=1","title":"HDMI 1","connection":true,"label":"","status":"active"}]]),
+        );
+        assert_eq!(inputs_v11[0].status.as_deref(), Some("active"));
         let inputs = check(
             av_content::GetCurrentExternalInputsStatus,
             "getCurrentExternalInputsStatus",
@@ -180,6 +204,42 @@ mod tests {
             json::json!([{"uri":"app"}]),
             json::json!([]),
         );
+    }
+
+    #[test]
+    fn discovered_screen_status_shapes() {
+        let banner = check(
+            video_screen::GetBannerMode,
+            "getBannerMode",
+            "1.0",
+            json::json!([]),
+            json::json!([{"currentValue":"small"}]),
+        );
+        assert_eq!(banner.current_value, "small");
+        let mode = check(
+            video_screen::GetMultiScreenMode,
+            "getMultiScreenMode",
+            "1.1",
+            json::json!([]),
+            json::json!([{"mode":"single","option":{"internetTVMode":false}}]),
+        );
+        assert_eq!(mode.option.unwrap().internet_tv_mode, Some(false));
+        let position = check(
+            video_screen::GetPipSubScreenPosition,
+            "getPipSubScreenPosition",
+            "1.0",
+            json::json!([]),
+            json::json!([{"position":"invalid"}]),
+        );
+        assert_eq!(position.position, "invalid");
+        let audio = check(
+            video_screen::GetAudioSourceScreen,
+            "getAudioSourceScreen",
+            "1.0",
+            json::json!([]),
+            json::json!([{"screen":"main"}]),
+        );
+        assert_eq!(audio.screen, "main");
     }
 
     #[test]
