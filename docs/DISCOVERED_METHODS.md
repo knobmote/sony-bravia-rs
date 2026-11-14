@@ -23,6 +23,10 @@ advertised by one TV on 2026-11-14; models and firmware can differ.
 - A [published discovery trace](https://community.openhab.org/t/sony-devices-binding/14052/274)
   shows the `internetTVMode` field within multi-screen options. The same field
   was observed in this TV's read-only response.
+- A [community integration](https://github.com/cmos486/Bravia-REST-API/releases)
+  identifies `outputTerminal` as a sound-setting target. A read-only
+  `getSoundSettings` v1.1 request for that target succeeded on the TV and
+  reported `audioSystem`; available values can vary by device.
 
 ## Library support
 
