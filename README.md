@@ -123,3 +123,11 @@ or response decoding problem.
 Support varies by display, firmware, region, and authentication level. Some
 professional-display APIs are localhost-only. The command definitions do not yet
 cover every method or version in Sony's reference.
+
+## GUITION board development
+
+The separate [firmware package](firmware/README.md) contains the ESP32-S31
+boot diagnostic and Wi-Fi compile probe. It has its own pinned compiler,
+lockfile and target configuration; the host workspace remains host-only.
+Progress and hardware acceptance are tracked in the
+[embedded bring-up plan](openspec/changes/embedded-remote-bringup/tasks.md).
