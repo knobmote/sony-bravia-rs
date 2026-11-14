@@ -9,9 +9,12 @@ use sony_bravia_api::app_control::GetApplicationStatusList;
 use sony_bravia_api::app_control::GetWebAppStatus;
 use sony_bravia_api::audio::GetSpeakerSettings;
 use sony_bravia_api::audio::GetVolumeInformation;
+use sony_bravia_api::av_content::GetContentCount;
+use sony_bravia_api::av_content::GetContentList;
 use sony_bravia_api::av_content::GetCurrentExternalInputsStatus;
 use sony_bravia_api::av_content::GetPlayingContentInfo;
 use sony_bravia_api::av_content::GetSchemeList;
+use sony_bravia_api::av_content::GetSourceList;
 use sony_bravia_api::encryption::GetPublicKey;
 use sony_bravia_api::guide::GetSupportedApiInfo;
 use sony_bravia_api::system::GetCurrentTime;
@@ -65,7 +68,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     }
     let psk = env::var("BRAVIA_PSK").ok();
     let mut client = Client::new(&url, psk.as_deref())?;
-    let results = [
+    let mut results = vec![
         check(&mut client, GetPowerStatus).await,
         check(&mut client, GetSystemInformation).await,
         check(&mut client, GetSupportedApiInfo::default()).await,
@@ -92,6 +95,46 @@ async fn main() -> Result<(), Box<dyn Error>> {
         check(&mut client, GetScreenRotation).await,
         check(&mut client, GetSceneSetting).await,
     ];
+    match client
+        .execute(GetSourceList {
+            scheme: "extInput".into(),
+        })
+        .await
+    {
+        Ok(sources) => {
+            println!("PASS avContent/getSourceList 1.0");
+            results.push(true);
+            if let Some(source) = sources.into_iter().next() {
+                results.push(
+                    check(
+                        &mut client,
+                        GetContentCount {
+                            source: source.source.clone(),
+                        },
+                    )
+                    .await,
+                );
+                results.push(
+                    check(
+                        &mut client,
+                        GetContentList {
+                            uri: Some(source.source),
+                            start_index: Some(0),
+                            count: Some(1),
+                        },
+                    )
+                    .await,
+                );
+            } else {
+                println!("SKIP content count and list: no external-input source");
+            }
+        }
+        Err(error) => {
+            println!("FAIL avContent/getSourceList 1.0: {error}");
+            println!("SKIP content count and list: source discovery failed");
+            results.push(false);
+        }
+    }
     let passed = results.iter().filter(|passed| **passed).count();
     println!("{passed}/{} commands passed", results.len());
     if passed != results.len() {

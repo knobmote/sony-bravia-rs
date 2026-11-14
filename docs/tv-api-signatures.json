@@ -1,0 +1,1142 @@
+{
+  "snapshot": "2026-11-14",
+  "source": "guide/getSupportedApiInfo and each service getMethodTypes; schema strings supplied by the TV",
+  "methods": [
+    {
+      "service": "accessControl",
+      "method": "getMethodTypes",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "string"
+      ],
+      "result": [
+        "string",
+        "string*",
+        "string*",
+        "string"
+      ]
+    },
+    {
+      "service": "accessControl",
+      "method": "getVersions",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string*"
+      ]
+    },
+    {
+      "service": "accessControl",
+      "method": "actRegister",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "{\"clientid\":\"string\", \"nickname\":\"string\", \"level\":\"string\"}",
+        "{\"function\":\"string\", \"value\":\"string\"}*"
+      ],
+      "result": []
+    },
+    {
+      "service": "appControl",
+      "method": "getMethodTypes",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "string"
+      ],
+      "result": [
+        "string",
+        "string*",
+        "string*",
+        "string"
+      ]
+    },
+    {
+      "service": "appControl",
+      "method": "getVersions",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string*"
+      ]
+    },
+    {
+      "service": "appControl",
+      "method": "getApplicationStatusList",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"name\":\"string\", \"status\":\"string\"}*"
+      ]
+    },
+    {
+      "service": "appControl",
+      "method": "terminateApps",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [],
+      "result": []
+    },
+    {
+      "service": "appControl",
+      "method": "getTextForm",
+      "version": "1.1",
+      "authLevel": "private",
+      "parameters": [
+        "{\"encKey\":\"string\"}"
+      ],
+      "result": [
+        "{\"text\":\"string\"}"
+      ]
+    },
+    {
+      "service": "appControl",
+      "method": "setActiveApp",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"uri\":\"string\", \"data\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "appControl",
+      "method": "setTextForm",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "string"
+      ],
+      "result": [
+        "int"
+      ]
+    },
+    {
+      "service": "appControl",
+      "method": "setTextForm",
+      "version": "1.1",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"encKey\":\"string\", \"text\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "appControl",
+      "method": "getWebAppStatus",
+      "version": "1.0",
+      "authLevel": "private",
+      "parameters": [],
+      "result": [
+        "{\"active\":\"bool\", \"url\":\"string\"}"
+      ]
+    },
+    {
+      "service": "appControl",
+      "method": "getApplicationList",
+      "version": "1.0",
+      "authLevel": "private",
+      "parameters": [],
+      "result": [
+        "{\"title\":\"string\", \"uri\":\"string\", \"icon\":\"string\", \"data\":\"string\"}*"
+      ]
+    },
+    {
+      "service": "audio",
+      "method": "getMethodTypes",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "string"
+      ],
+      "result": [
+        "string",
+        "string*",
+        "string*",
+        "string"
+      ]
+    },
+    {
+      "service": "audio",
+      "method": "getVersions",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string*"
+      ]
+    },
+    {
+      "service": "audio",
+      "method": "setAudioVolume",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"target\":\"string\", \"volume\":\"string\"}"
+      ],
+      "result": [
+        "int"
+      ]
+    },
+    {
+      "service": "audio",
+      "method": "setAudioVolume",
+      "version": "1.2",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"target\":\"string\", \"volume\":\"string\", \"ui\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "audio",
+      "method": "getVolumeInformation",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"target\":\"string\", \"volume\":\"int\", \"mute\":\"bool\", \"maxVolume\":\"int\", \"minVolume\":\"int\"}*"
+      ]
+    },
+    {
+      "service": "audio",
+      "method": "getSoundSettings",
+      "version": "1.1",
+      "authLevel": "none",
+      "parameters": [
+        "{\"target\":\"string\"}"
+      ],
+      "result": [
+        "{\"target\":\"string\", \"currentValue\":\"string\", \"deviceUIInfo\":\"string\", \"title\":\"string\", \"titleTextID\":\"string\", \"type\":\"string\", \"isAvailable\":\"bool\", \"candidate\":\"GeneralSettingsCandidate[]\"}*"
+      ]
+    },
+    {
+      "service": "audio",
+      "method": "setSoundSettings",
+      "version": "1.1",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"settings\":\"GeneralSettings[]\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "audio",
+      "method": "setAudioMute",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"status\":\"bool\"}"
+      ],
+      "result": [
+        "int"
+      ]
+    },
+    {
+      "service": "audio",
+      "method": "setSpeakerSettings",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"settings\":\"GeneralSettings[]\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "audio",
+      "method": "getSpeakerSettings",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "{\"target\":\"string\"}"
+      ],
+      "result": [
+        "{\"target\":\"string\", \"currentValue\":\"string\", \"deviceUIInfo\":\"string\", \"title\":\"string\", \"titleTextID\":\"string\", \"type\":\"string\", \"isAvailable\":\"bool\", \"candidate\":\"GeneralSettingsCandidate[]\"}*"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "getMethodTypes",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "string"
+      ],
+      "result": [
+        "string",
+        "string*",
+        "string*",
+        "string"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "getVersions",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string*"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "getContentList",
+      "version": "1.0",
+      "authLevel": "private",
+      "parameters": [
+        "{\"source\":\"string\", \"stIdx\":\"int\", \"cnt\":\"int\", \"type\":\"string\"}"
+      ],
+      "result": [
+        "{\"uri\":\"string\", \"title\":\"string\", \"index\":\"int\", \"dispNum\":\"string\", \"originalDispNum\":\"string\", \"tripletStr\":\"string\", \"programNum\":\"int\", \"programMediaType\":\"string\", \"directRemoteNum\":\"int\", \"startDateTime\":\"string\", \"durationSec\":\"int\", \"channelName\":\"string\", \"fileSizeByte\":\"int\", \"isProtected\":\"bool\", \"isAlreadyPlayed\":\"bool\"}*"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "getContentList",
+      "version": "1.2",
+      "authLevel": "private",
+      "parameters": [
+        "{\"source\":\"string\", \"stIdx\":\"int\", \"cnt\":\"int\", \"type\":\"string\", \"target\":\"string\"}"
+      ],
+      "result": [
+        "{\"uri\":\"string\", \"title\":\"string\", \"index\":\"int\", \"dispNum\":\"string\", \"originalDispNum\":\"string\", \"tripletStr\":\"string\", \"programNum\":\"int\", \"programMediaType\":\"string\", \"directRemoteNum\":\"int\", \"epgVisibility\":\"string\", \"channelSurfingVisibility\":\"string\", \"visibility\":\"string\", \"startDateTime\":\"string\", \"channelName\":\"string\", \"fileSizeByte\":\"int\", \"isProtected\":\"bool\", \"isAlreadyPlayed\":\"bool\", \"productID\":\"string\", \"contentType\":\"string\", \"storageUri\":\"string\", \"videoCodec\":\"string\", \"chapterCount\":\"int\", \"durationSec\":\"double\", \"audioCodec\":\"string*\", \"audioFrequency\":\"string*\", \"audioChannel\":\"string*\", \"subtitleLanguage\":\"string*\", \"subtitleTitle\":\"string*\", \"parentalRating\":\"string*\", \"parentalSystem\":\"string*\", \"parentalCountry\":\"string*\", \"sizeMB\":\"int\", \"createdTime\":\"string\", \"userContentFlag\":\"bool\"}*"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "getContentList",
+      "version": "1.5",
+      "authLevel": "private",
+      "parameters": [
+        "{\"uri\":\"string\", \"stIdx\":\"int\", \"cnt\":\"int\", \"type\":\"string*\", \"target\":\"string\", \"view\":\"string\", \"sort\":\"SortInfo\", \"search\":\"Search\", \"filter\":\"string*\"}"
+      ],
+      "result": [
+        "{\"uri\":\"string\", \"source\":\"string\", \"sourceLabel\":\"string\", \"title\":\"string\", \"index\":\"int\", \"output\":\"string\", \"stateInfo\":\"StateInfo\", \"globalPlaybackCount\":\"int\", \"dubbingInfo\":\"DubbingInfo\", \"position\":\"Position\", \"duration\":\"Duration\", \"playSpeed\":\"Speed\", \"repeatType\":\"string\", \"dispNum\":\"string\", \"originalDispNum\":\"string\", \"tripletStr\":\"string\", \"programNum\":\"int\", \"programTitle\":\"string\", \"programMediaType\":\"string\", \"programServiceType\":\"string\", \"directRemoteNum\":\"int\", \"visibility\":\"Visibility\", \"startDateTime\":\"string\", \"mediaType\":\"string\", \"bivlInfo\":\"BivlInfo\", \"chapterIndex\":\"int\", \"chapterCount\":\"int\", \"channelName\":\"string\", \"fileSizeByte\":\"int\", \"isProtected\":\"string\", \"isAutoDelete\":\"string\", \"isAlreadyPlayed\":\"string\", \"isNew\":\"string\", \"productID\":\"string\", \"contentType\":\"string\", \"storageUri\":\"string\", \"audioInfo\":\"AudioInfo[]\", \"subtitleInfo\":\"SubtitleInfo[]\", \"parentalInfo\":\"ParentalInfo[]\", \"dabInfo\":\"DabInfo\", \"sizeMB\":\"int\", \"createdTime\":\"string\", \"userContentFlag\":\"bool\", \"content\":\"ContentInfo\", \"folderNo\":\"string\", \"fileNo\":\"string\", \"totalCount\":\"int\", \"artist\":\"string\", \"genre\":\"string*\", \"broadcastGenreInfo\":\"BroadcastGenreInfo[]\", \"albumName\":\"string\", \"contentKind\":\"string\", \"isPlayable\":\"string\", \"isBrowsable\":\"string\", \"remotePlayType\":\"string*\", \"playlistName\":\"string\", \"podcastName\":\"string\", \"broadcastFreq\":\"BroadcastFreq\", \"service\":\"string\", \"parentUri\":\"string\", \"parentIndex\":\"int\", \"videoInfo\":\"VideoInfo[]\", \"groupInfo\":\"GroupInfo[]\", \"isPlaylist\":\"string\", \"playlistInfo\":\"PlaylistInfo[]\", \"recordingInfo\":\"RecordingInfo\", \"is3D\":\"string\", \"is4K\":\"string\", \"applicationName\":\"string\", \"isSoundPhoto\":\"string\", \"description\":\"Description\", \"hasResume\":\"string\", \"eventId\":\"string\", \"dataInfo\":\"DataBroadcastInfo\", \"syncContentPriority\":\"string\", \"clipCount\":\"int\"}*"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "getSchemeList",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"scheme\":\"string\"}*"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "getCurrentExternalInputsStatus",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"uri\":\"string\", \"title\":\"string\", \"connection\":\"bool\", \"label\":\"string\", \"icon\":\"string\"}*"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "getCurrentExternalInputsStatus",
+      "version": "1.1",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"uri\":\"string\", \"title\":\"string\", \"connection\":\"bool\", \"label\":\"string\", \"icon\":\"string\", \"status\":\"string\"}*"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "setPlayTvContent",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"channel\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "avContent",
+      "method": "setPlayTvContent",
+      "version": "1.1",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"channel\":\"PlayTvChannel\", \"source\":\"string\", \"sourceType\":\"string\", \"broadcastFreqName\":\"string\", \"ignoreVisibilitySettings\":\"bool\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "avContent",
+      "method": "setDeleteProtection",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"uri\":\"string\", \"isProtected\":\"bool\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "avContent",
+      "method": "getPlayingContentInfo",
+      "version": "1.0",
+      "authLevel": "private",
+      "parameters": [],
+      "result": [
+        "{\"uri\":\"string\", \"source\":\"string\", \"title\":\"string\", \"dispNum\":\"string\", \"originalDispNum\":\"string\", \"tripletStr\":\"string\", \"programNum\":\"int\", \"programTitle\":\"string\", \"startDateTime\":\"string\", \"durationSec\":\"int\", \"mediaType\":\"string\", \"playSpeed\":\"string\", \"bivl_serviceId\":\"string\", \"bivl_assetId\":\"string\", \"bivl_provider\":\"string\"}"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "deleteContent",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"uri\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "avContent",
+      "method": "getFavoriteList",
+      "version": "1.0",
+      "authLevel": "private",
+      "parameters": [],
+      "result": [
+        "{\"source\":\"string\", \"label\":\"string\"}*"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "getSourceList",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "{\"scheme\":\"string\"}"
+      ],
+      "result": [
+        "{\"source\":\"string\"}*"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "setPlayContent",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"uri\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "avContent",
+      "method": "setTvContentVisibility",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"uri\":\"string\", \"epgVisibility\":\"string\", \"channelSurfingVisibility\":\"string\", \"visibility\":\"string\"}*"
+      ],
+      "result": []
+    },
+    {
+      "service": "avContent",
+      "method": "getContentCount",
+      "version": "1.0",
+      "authLevel": "private",
+      "parameters": [
+        "{\"source\":\"string\", \"type\":\"string\"}"
+      ],
+      "result": [
+        "{\"count\":\"int\"}"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "getContentCount",
+      "version": "1.1",
+      "authLevel": "private",
+      "parameters": [
+        "{\"source\":\"string\", \"type\":\"string\", \"target\":\"string\"}"
+      ],
+      "result": [
+        "{\"count\":\"int\"}"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "getParentalRatingSettings",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [],
+      "result": [
+        "{\"ratingTypeAge\":\"int\", \"ratingTypeSony\":\"string\", \"ratingCountry\":\"string\", \"ratingCustomTypeTV\":\"string*\", \"ratingCustomTypeMpaa\":\"string\", \"ratingCustomTypeCaEnglish\":\"string\", \"ratingCustomTypeCaFrench\":\"string\", \"unratedLock\":\"bool\"}"
+      ]
+    },
+    {
+      "service": "avContent",
+      "method": "setFavoriteContentList",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"favSource\":\"string\", \"contents\":\"string*\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "browser",
+      "method": "getMethodTypes",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "string"
+      ],
+      "result": [
+        "string",
+        "string*",
+        "string*",
+        "string"
+      ]
+    },
+    {
+      "service": "browser",
+      "method": "getVersions",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string*"
+      ]
+    },
+    {
+      "service": "browser",
+      "method": "actBrowserControl",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"control\":\"string\"}"
+      ],
+      "result": [
+        "int"
+      ]
+    },
+    {
+      "service": "browser",
+      "method": "getTextUrl",
+      "version": "1.0",
+      "authLevel": "private",
+      "parameters": [],
+      "result": [
+        "{\"url\":\"string\", \"title\":\"string\", \"type\":\"string\", \"favicon\":\"string\"}"
+      ]
+    },
+    {
+      "service": "browser",
+      "method": "setTextUrl",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"url\":\"string\", \"title\":\"string\", \"type\":\"string\", \"favicon\":\"string\"}"
+      ],
+      "result": [
+        "int"
+      ]
+    },
+    {
+      "service": "cec",
+      "method": "getMethodTypes",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "string"
+      ],
+      "result": [
+        "string",
+        "string*",
+        "string*",
+        "string"
+      ]
+    },
+    {
+      "service": "cec",
+      "method": "getVersions",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string*"
+      ]
+    },
+    {
+      "service": "cec",
+      "method": "setCecControlMode",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"enabled\":\"bool\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "cec",
+      "method": "setMhlPowerFeedMode",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"enabled\":\"bool\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "cec",
+      "method": "setPowerSyncMode",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"sinkPowerOffSync\":\"bool\", \"sourcePowerOnSync\":\"bool\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "cec",
+      "method": "setMhlAutoInputChangeMode",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"enabled\":\"bool\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "encryption",
+      "method": "getMethodTypes",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "string"
+      ],
+      "result": [
+        "string",
+        "string*",
+        "string*",
+        "string"
+      ]
+    },
+    {
+      "service": "encryption",
+      "method": "getVersions",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string*"
+      ]
+    },
+    {
+      "service": "encryption",
+      "method": "getPublicKey",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"publicKey\":\"string\"}"
+      ]
+    },
+    {
+      "service": "guide",
+      "method": "getMethodTypes",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "string"
+      ],
+      "result": [
+        "string",
+        "string*",
+        "string*",
+        "string"
+      ]
+    },
+    {
+      "service": "guide",
+      "method": "getVersions",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string*"
+      ]
+    },
+    {
+      "service": "guide",
+      "method": "getServiceProtocols",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string",
+        "string*"
+      ]
+    },
+    {
+      "service": "guide",
+      "method": "getSupportedApiInfo",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "{\"services\":\"string*\"}"
+      ],
+      "result": [
+        "{\"service\":\"string\", \"protocols\":\"string*\", \"apis\":\"ApiInfo[]\"}*"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "getMethodTypes",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "string"
+      ],
+      "result": [
+        "string",
+        "string*",
+        "string*",
+        "string"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "getVersions",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string*"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "getDeviceMode",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"value\":\"string\"}"
+      ],
+      "result": [
+        "{\"isOn\":\"bool\"}"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "requestReboot",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [],
+      "result": []
+    },
+    {
+      "service": "system",
+      "method": "getInterfaceInformation",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"productCategory\":\"string\", \"productName\":\"string\", \"modelName\":\"string\", \"serverName\":\"string\", \"interfaceVersion\":\"string\"}"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "getRemoteDeviceSettings",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "{\"target\":\"string\"}"
+      ],
+      "result": [
+        "{\"target\":\"string\", \"currentValue\":\"string\", \"deviceUIInfo\":\"string\", \"title\":\"string\", \"titleTextID\":\"string\", \"type\":\"string\", \"isAvailable\":\"bool\", \"candidate\":\"GeneralSettingsCandidate[]\"}*"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "getNetworkSettings",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"netif\":\"string\"}"
+      ],
+      "result": [
+        "{\"netif\":\"string\", \"hwAddr\":\"string\", \"ipAddrV4\":\"string\", \"ipAddrV6\":\"string\", \"netmask\":\"string\", \"gateway\":\"string\", \"dns\":\"string*\"}*"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "setDeviceMode",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"value\":\"string\", \"isOn\":\"bool\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "system",
+      "method": "getSystemSupportedFunction",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"option\":\"string\", \"value\":\"string\"}*"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "getPowerSavingMode",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"mode\":\"string\"}"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "setWolMode",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"enabled\":\"bool\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "system",
+      "method": "getWolMode",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [],
+      "result": [
+        "{\"enabled\":\"bool\"}"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "setPowerSavingMode",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"mode\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "system",
+      "method": "mountStorage",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"uri\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "system",
+      "method": "setPowerStatus",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"status\":\"bool\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "system",
+      "method": "getLEDIndicatorStatus",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [],
+      "result": [
+        "{\"mode\":\"string\", \"status\":\"string\"}"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "getPowerStatus",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"status\":\"string\"}"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "getCurrentTime",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "getCurrentTime",
+      "version": "1.1",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"dateTime\":\"string\", \"timeZoneOffsetMinute\":\"int\", \"dstOffsetMinute\":\"int\"}"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "getStorageList",
+      "version": "1.1",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"uri\":\"string\"}"
+      ],
+      "result": [
+        "{\"uri\":\"string\", \"deviceName\":\"string\", \"volumeLabel\":\"string\", \"permission\":\"string\", \"position\":\"string\", \"formattable\":\"string\", \"mounted\":\"string\", \"wholeCapacityMB\":\"int\", \"freeCapacityMB\":\"int\", \"systemAreaCapacityMB\":\"int\", \"formatting\":\"string\", \"isAvailable\":\"string\"}*"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "getSystemInformation",
+      "version": "1.0",
+      "authLevel": "private",
+      "parameters": [],
+      "result": [
+        "{\"product\":\"string\", \"region\":\"string\", \"language\":\"string\", \"model\":\"string\", \"serial\":\"string\", \"macAddr\":\"string\", \"name\":\"string\", \"generation\":\"string\", \"area\":\"string\", \"cid\":\"string\"}"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "getRemoteControllerInfo",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"bundled\":\"bool\", \"type\":\"string\"}",
+        "{\"name\":\"string\", \"value\":\"string\"}*"
+      ]
+    },
+    {
+      "service": "system",
+      "method": "setLEDIndicatorStatus",
+      "version": "1.1",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"mode\":\"string\", \"status\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "system",
+      "method": "setLanguage",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"language\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "video",
+      "method": "getMethodTypes",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "string"
+      ],
+      "result": [
+        "string",
+        "string*",
+        "string*",
+        "string"
+      ]
+    },
+    {
+      "service": "video",
+      "method": "getVersions",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string*"
+      ]
+    },
+    {
+      "service": "video",
+      "method": "getPictureQualitySettings",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "{\"target\":\"string\", \"uri\":\"string\", \"mode\":\"string\"}"
+      ],
+      "result": [
+        "{\"target\":\"string\", \"uri\":\"string\", \"mode\":\"string\", \"currentValue\":\"string\", \"deviceUIInfo\":\"string\", \"title\":\"string\", \"titleTextID\":\"string\", \"type\":\"string\", \"isAvailable\":\"bool\", \"candidate\":\"PictureQualitySettingsCandidate[]\"}*"
+      ]
+    },
+    {
+      "service": "video",
+      "method": "setPictureQualitySettings",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"settings\":\"PictureQualitySettings[]\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "videoScreen",
+      "method": "getMethodTypes",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [
+        "string"
+      ],
+      "result": [
+        "string",
+        "string*",
+        "string*",
+        "string"
+      ]
+    },
+    {
+      "service": "videoScreen",
+      "method": "getVersions",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "string*"
+      ]
+    },
+    {
+      "service": "videoScreen",
+      "method": "setBannerMode",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"value\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "videoScreen",
+      "method": "setAudioSourceScreen",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"screen\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "videoScreen",
+      "method": "requestToNotifyScreenState",
+      "version": "1.1",
+      "authLevel": "none",
+      "parameters": [
+        "{\"multiScreenMode\":\"string\", \"pipSubScreenPosition\":\"string\", \"audioSourceScreen\":\"string\", \"option\":\"MultiScreenModeOption\"}"
+      ],
+      "result": [
+        "{\"multiScreenMode\":\"string\", \"pipSubScreenPosition\":\"string\", \"audioSourceScreen\":\"string\", \"option\":\"MultiScreenModeOption\"}"
+      ]
+    },
+    {
+      "service": "videoScreen",
+      "method": "setMultiScreenMode",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"mode\":\"string\", \"option\":\"MultiScreenModeOption\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "videoScreen",
+      "method": "getPipSubScreenPosition",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"position\":\"string\"}"
+      ]
+    },
+    {
+      "service": "videoScreen",
+      "method": "setPipSubScreenPosition",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"position\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "videoScreen",
+      "method": "getBannerMode",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"currentValue\":\"string\", \"candidate\":\"BannerModeCandidate[]\"}"
+      ]
+    },
+    {
+      "service": "videoScreen",
+      "method": "getSceneSetting",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"currentValue\":\"string\", \"candidate\":\"SceneSettingCandidate[]\"}"
+      ]
+    },
+    {
+      "service": "videoScreen",
+      "method": "setPapScreenSize",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"screen\":\"string\", \"size\":\"string\"}"
+      ],
+      "result": []
+    },
+    {
+      "service": "videoScreen",
+      "method": "getMultiScreenMode",
+      "version": "1.1",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"mode\":\"string\", \"option\":\"MultiScreenModeOption\"}"
+      ]
+    },
+    {
+      "service": "videoScreen",
+      "method": "getAudioSourceScreen",
+      "version": "1.0",
+      "authLevel": "none",
+      "parameters": [],
+      "result": [
+        "{\"screen\":\"string\"}"
+      ]
+    },
+    {
+      "service": "videoScreen",
+      "method": "setSceneSetting",
+      "version": "1.0",
+      "authLevel": "generic",
+      "parameters": [
+        "{\"value\":\"string\"}"
+      ],
+      "result": []
+    }
+  ]
+}
