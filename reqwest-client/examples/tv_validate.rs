@@ -15,6 +15,9 @@ use sony_bravia_api::av_content::GetCurrentExternalInputsStatus;
 use sony_bravia_api::av_content::GetPlayingContentInfo;
 use sony_bravia_api::av_content::GetSchemeList;
 use sony_bravia_api::av_content::GetSourceList;
+use sony_bravia_api::discovery::GetMethodTypes;
+use sony_bravia_api::discovery::GetVersions;
+use sony_bravia_api::discovery::service;
 use sony_bravia_api::encryption::GetPublicKey;
 use sony_bravia_api::guide::GetSupportedApiInfo;
 use sony_bravia_api::system::GetCurrentTime;
@@ -72,6 +75,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
         check(&mut client, GetPowerStatus).await,
         check(&mut client, GetSystemInformation).await,
         check(&mut client, GetSupportedApiInfo::default()).await,
+        check(&mut client, GetVersions::<service::Audio>::new()).await,
+        check(&mut client, GetMethodTypes::<service::Audio>::new("")).await,
         check(&mut client, GetCurrentTime).await,
         check(&mut client, GetCurrentTimeV1_1).await,
         check(&mut client, GetWolMode).await,

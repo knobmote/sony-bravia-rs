@@ -7,6 +7,7 @@ use alloc::string::String;
 use alloc::string::ToString;
 use alloc::vec;
 use alloc::vec::Vec;
+use core::marker::PhantomData;
 use core::num::NonZeroI32;
 
 use serde::Deserialize;
@@ -29,6 +30,7 @@ pub use transport::Response;
 pub mod app_control;
 pub mod audio;
 pub mod av_content;
+pub mod discovery;
 pub mod encryption;
 pub mod guide;
 pub mod system;

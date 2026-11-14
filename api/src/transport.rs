@@ -43,12 +43,18 @@ impl Request {
 pub enum Response {
     Success {
         id: NonZeroI32,
+        #[serde(alias = "results")]
         result: Vec<json::Value>,
     },
     Failure {
         id: NonZeroI32,
         error: Error,
-        #[serde(default, rename = "result", deserialize_with = "reject_result")]
+        #[serde(
+            default,
+            rename = "result",
+            alias = "results",
+            deserialize_with = "reject_result"
+        )]
         _result: (),
     },
 }
@@ -132,6 +138,11 @@ mod tests {
         assert_eq!(response.id().get(), 2);
         let response = response.response::<TestCommand>().unwrap();
         assert_eq!(response.unwrap(), vec![42]);
+        let response = Response::from_json(r#"{"results":[42],"id":2}"#).unwrap();
+        assert_eq!(
+            response.response::<TestCommand>().unwrap().unwrap(),
+            vec![42]
+        );
     }
 
     #[test]
@@ -142,6 +153,8 @@ mod tests {
             r#"{"error":[401,"bad"],"id":0}"#,
             r#"{"id":2}"#,
             r#"{"result":"invalid","error":[401,"bad"],"id":2}"#,
+            r#"{"results":"invalid","error":[401,"bad"],"id":2}"#,
+            r#"{"result":[],"results":[],"id":2}"#,
         ] {
             assert!(
                 Response::from_json(input).is_err(),

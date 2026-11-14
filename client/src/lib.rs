@@ -184,6 +184,8 @@ mod tests {
     use super::*;
     use sony_bravia_api::ErrorCode;
     use sony_bravia_api::audio::SetAudioMute;
+    use sony_bravia_api::discovery::GetMethodTypes;
+    use sony_bravia_api::discovery::service;
     use sony_bravia_api::system::GetPowerStatus;
     use sony_bravia_api::system::PowerStatus;
 
@@ -273,6 +275,21 @@ mod tests {
         assert!(matches!(
             client.prepare(GetPowerStatus),
             Err(Error::IdsExhausted)
+        ));
+    }
+
+    #[test]
+    fn completes_method_discovery_and_checks_response_id() {
+        let pending = Client::new()
+            .prepare(GetMethodTypes::<service::Audio>::new(""))
+            .unwrap();
+        assert_eq!(pending.path(), "/sony/audio");
+        let body = br#"{"id":1,"results":[["getVolumeInformation",[],["object*"],"1.0"]]}"#;
+        let methods = pending.complete(200, body).unwrap();
+        assert_eq!(methods[0].name, "getVolumeInformation");
+        assert!(matches!(
+            pending.complete(200, br#"{"id":2,"results":[]}"#),
+            Err(Error::MismatchedId { .. })
         ));
     }
 }
