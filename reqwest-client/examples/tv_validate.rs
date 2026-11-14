@@ -6,21 +6,27 @@ use std::error::Error;
 use sony_bravia_api::SonyBraviaTvCommand;
 use sony_bravia_api::app_control::GetApplicationList;
 use sony_bravia_api::app_control::GetApplicationStatusList;
+use sony_bravia_api::app_control::GetWebAppStatus;
 use sony_bravia_api::audio::GetSpeakerSettings;
 use sony_bravia_api::audio::GetVolumeInformation;
 use sony_bravia_api::av_content::GetCurrentExternalInputsStatus;
 use sony_bravia_api::av_content::GetPlayingContentInfo;
 use sony_bravia_api::av_content::GetSchemeList;
+use sony_bravia_api::encryption::GetPublicKey;
+use sony_bravia_api::guide::GetSupportedApiInfo;
 use sony_bravia_api::system::GetCurrentTime;
 use sony_bravia_api::system::GetCurrentTimeV1_1;
 use sony_bravia_api::system::GetInterfaceInformation;
 use sony_bravia_api::system::GetLedIndicatorStatus;
+use sony_bravia_api::system::GetNetworkSettings;
 use sony_bravia_api::system::GetPowerSavingMode;
 use sony_bravia_api::system::GetPowerStatus;
 use sony_bravia_api::system::GetRemoteControllerInfo;
+use sony_bravia_api::system::GetRemoteDeviceSettings;
 use sony_bravia_api::system::GetSystemInformation;
 use sony_bravia_api::system::GetSystemSupportedFunction;
 use sony_bravia_api::system::GetWolMode;
+use sony_bravia_api::video::GetPictureQualitySettings;
 use sony_bravia_api::video::GetScreenRotation;
 use sony_bravia_api::video_screen::GetSceneSetting;
 use sony_bravia_client::Error as ProtocolError;
@@ -62,6 +68,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let results = [
         check(&mut client, GetPowerStatus).await,
         check(&mut client, GetSystemInformation).await,
+        check(&mut client, GetSupportedApiInfo::default()).await,
         check(&mut client, GetCurrentTime).await,
         check(&mut client, GetCurrentTimeV1_1).await,
         check(&mut client, GetWolMode).await,
@@ -70,6 +77,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
         check(&mut client, GetSystemSupportedFunction).await,
         check(&mut client, GetPowerSavingMode).await,
         check(&mut client, GetLedIndicatorStatus).await,
+        check(&mut client, GetNetworkSettings::default()).await,
+        check(&mut client, GetRemoteDeviceSettings::default()).await,
+        check(&mut client, GetPublicKey).await,
         check(&mut client, GetVolumeInformation).await,
         check(&mut client, GetSpeakerSettings::default()).await,
         check(&mut client, GetCurrentExternalInputsStatus).await,
@@ -77,6 +87,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
         check(&mut client, GetSchemeList).await,
         check(&mut client, GetApplicationList).await,
         check(&mut client, GetApplicationStatusList).await,
+        check(&mut client, GetWebAppStatus).await,
+        check(&mut client, GetPictureQualitySettings::default()).await,
         check(&mut client, GetScreenRotation).await,
         check(&mut client, GetSceneSetting).await,
     ];
