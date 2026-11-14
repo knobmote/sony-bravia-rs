@@ -75,18 +75,12 @@ impl Response {
         }
     }
 
-    pub fn response<T>(self) -> json::Result<Result<Vec<T::Response>, Error>>
+    pub fn response<T>(self) -> json::Result<Result<T::Response, Error>>
     where
         T: SonyBraviaTvCommand,
     {
         let response = match self {
-            Self::Success { result, .. } => {
-                let result = result
-                    .into_iter()
-                    .map(json::from_value)
-                    .collect::<Result<Vec<_>, _>>()?;
-                Ok(result)
-            }
+            Self::Success { result, .. } => Ok(T::decode_response(json::Value::Array(result))?),
             Self::Failure { error, .. } => Err(error),
         };
         Ok(response)
@@ -100,14 +94,20 @@ mod tests {
     struct TestCommand;
 
     impl SonyBraviaTvCommand for TestCommand {
+        const SERVICE: &str = "test";
         const METHOD: &str = "test";
         const VERSION: &str = "1.0";
 
         type Params = ();
-        type Response = i32;
+        type Response = Vec<i32>;
 
         fn params(&self) -> Option<Self::Params> {
             None
+        }
+
+        fn decode_response(result: json::Value) -> json::Result<Self::Response> {
+            let _ = result;
+            todo!()
         }
     }
 

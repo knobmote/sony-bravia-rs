@@ -3,17 +3,38 @@ use std::num::NonZeroI32;
 
 use serde::Deserialize;
 use serde::Serialize;
+use serde::de::DeserializeOwned;
 use serde_json as json;
+use serde_json::Value;
+
+use commands::empty;
+use commands::single;
+use commands::zero;
 
 pub use error::Error;
 pub use error::ErrorCode;
+pub use system::GetPowerStatus;
+pub use system::PowerStatus;
+pub use system::SetPowerStatus;
 pub use transport::Request;
 pub use transport::Response;
 
+pub mod app_control;
+pub mod audio;
+pub mod av_content;
+pub mod encryption;
+pub mod guide;
+pub mod system;
+pub mod video;
+pub mod video_screen;
+
+mod commands;
 mod error;
 mod transport;
 
 pub trait SonyBraviaTvCommand {
+    /// Sony REST service used to route this command.
+    const SERVICE: &str;
     const METHOD: &str;
     const VERSION: &str;
 
@@ -21,4 +42,7 @@ pub trait SonyBraviaTvCommand {
     type Response: for<'de> Deserialize<'de>;
 
     fn params(&self) -> Option<Self::Params>;
+
+    /// Decode the complete `result` array into the command's response.
+    fn decode_response(result: json::Value) -> json::Result<Self::Response>;
 }
