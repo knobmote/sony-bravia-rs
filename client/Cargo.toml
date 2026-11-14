@@ -1,0 +1,14 @@
+[package]
+name = "sony-bravia-client"
+description = "Sans-I/O client for Sony BRAVIA REST commands"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license.workspace = true
+
+[dependencies]
+sony-bravia-api = { path = "../api", version = "0.1.0" }
+serde_json.workspace = true
+
+[lints]
+workspace = true

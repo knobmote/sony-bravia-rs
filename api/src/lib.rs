@@ -1,5 +1,14 @@
-use std::fmt;
-use std::num::NonZeroI32;
+#![no_std]
+
+extern crate alloc;
+
+use alloc::format;
+use alloc::string::String;
+use alloc::string::ToString;
+use alloc::vec;
+use alloc::vec::Vec;
+use core::fmt;
+use core::num::NonZeroI32;
 
 use serde::Deserialize;
 use serde::Serialize;

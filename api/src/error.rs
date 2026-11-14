@@ -12,8 +12,8 @@ impl Error {
     }
 }
 
-impl std::error::Error for Error {
-    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+impl core::error::Error for Error {
+    fn source(&self) -> Option<&(dyn core::error::Error + 'static)> {
         None
     }
 
@@ -21,7 +21,7 @@ impl std::error::Error for Error {
         "description() is deprecated; use Display"
     }
 
-    fn cause(&self) -> Option<&dyn std::error::Error> {
+    fn cause(&self) -> Option<&dyn core::error::Error> {
         self.source()
     }
 }
@@ -226,7 +226,7 @@ mod tests {
             (42400, ErrorCode::KeyDoesNotExist),
         ];
 
-        let mut buf = std::fmt::NumBuffer::new();
+        let mut buf = core::fmt::NumBuffer::new();
 
         for (number, code) in cases {
             assert_eq!(ErrorCode::from(number), code);
