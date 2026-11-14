@@ -15,11 +15,14 @@ impl SonyBraviaTvCommand for GetAudioSourceScreen {
     const SERVICE: &str = "videoScreen";
     const METHOD: &str = "getAudioSourceScreen";
     const VERSION: &str = "1.0";
+
     type Params = ();
     type Response = AudioSourceScreen;
+
     fn params(&self) -> Option<Self::Params> {
         None
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -42,11 +45,14 @@ impl SonyBraviaTvCommand for GetBannerMode {
     const SERVICE: &str = "videoScreen";
     const METHOD: &str = "getBannerMode";
     const VERSION: &str = "1.0";
+
     type Params = ();
     type Response = BannerMode;
+
     fn params(&self) -> Option<Self::Params> {
         None
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -65,11 +71,14 @@ impl SonyBraviaTvCommand for GetPipSubScreenPosition {
     const SERVICE: &str = "videoScreen";
     const METHOD: &str = "getPipSubScreenPosition";
     const VERSION: &str = "1.0";
+
     type Params = ();
     type Response = PipSubScreenPosition;
+
     fn params(&self) -> Option<Self::Params> {
         None
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -102,11 +111,14 @@ impl SonyBraviaTvCommand for SetAudioSourceScreen {
     const SERVICE: &str = "videoScreen";
     const METHOD: &str = "setAudioSourceScreen";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -122,11 +134,14 @@ impl SonyBraviaTvCommand for SetBannerMode {
     const SERVICE: &str = "videoScreen";
     const METHOD: &str = "setBannerMode";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -144,11 +159,14 @@ impl SonyBraviaTvCommand for SetMultiScreenMode {
     const SERVICE: &str = "videoScreen";
     const METHOD: &str = "setMultiScreenMode";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -164,11 +182,14 @@ impl SonyBraviaTvCommand for SetPipSubScreenPosition {
     const SERVICE: &str = "videoScreen";
     const METHOD: &str = "setPipSubScreenPosition";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -185,11 +206,14 @@ impl SonyBraviaTvCommand for SetPapScreenSize {
     const SERVICE: &str = "videoScreen";
     const METHOD: &str = "setPapScreenSize";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -222,11 +246,14 @@ impl SonyBraviaTvCommand for RequestToNotifyScreenState {
     const SERVICE: &str = "videoScreen";
     const METHOD: &str = "requestToNotifyScreenState";
     const VERSION: &str = "1.1";
+
     type Params = Self;
     type Response = ScreenState;
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -236,11 +263,14 @@ impl SonyBraviaTvCommand for GetMultiScreenMode {
     const SERVICE: &str = "videoScreen";
     const METHOD: &str = "getMultiScreenMode";
     const VERSION: &str = "1.1";
+
     type Params = ();
     type Response = MultiScreenMode;
+
     fn params(&self) -> Option<Self::Params> {
         None
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }

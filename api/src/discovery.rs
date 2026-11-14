@@ -13,56 +13,77 @@ pub mod service {
 
     #[derive(Debug)]
     pub struct AccessControl;
+
     impl Service for AccessControl {
         const NAME: &'static str = "accessControl";
     }
+
     #[derive(Debug)]
     pub struct AppControl;
+
     impl Service for AppControl {
         const NAME: &'static str = "appControl";
     }
+
     #[derive(Debug)]
     pub struct Audio;
+
     impl Service for Audio {
         const NAME: &'static str = "audio";
     }
+
     #[derive(Debug)]
     pub struct AvContent;
+
     impl Service for AvContent {
         const NAME: &'static str = "avContent";
     }
+
     #[derive(Debug)]
     pub struct Browser;
+
     impl Service for Browser {
         const NAME: &'static str = "browser";
     }
+
     #[derive(Debug)]
     pub struct Cec;
+
     impl Service for Cec {
         const NAME: &'static str = "cec";
     }
+
     #[derive(Debug)]
     pub struct Encryption;
+
     impl Service for Encryption {
         const NAME: &'static str = "encryption";
     }
+
     #[derive(Debug)]
     pub struct Guide;
+
     impl Service for Guide {
         const NAME: &'static str = "guide";
     }
+
     #[derive(Debug)]
     pub struct System;
+
     impl Service for System {
         const NAME: &'static str = "system";
     }
+
     #[derive(Debug)]
     pub struct Video;
+
     impl Service for Video {
         const NAME: &'static str = "video";
     }
+
     #[derive(Debug)]
     pub struct VideoScreen;
+
     impl Service for VideoScreen {
         const NAME: &'static str = "videoScreen";
     }
@@ -88,11 +109,14 @@ impl<S: Service> SonyBraviaTvCommand for GetVersions<S> {
     const SERVICE: &str = S::NAME;
     const METHOD: &str = "getVersions";
     const VERSION: &str = "1.0";
+
     type Params = ();
     type Response = Vec<String>;
+
     fn params(&self) -> Option<Self::Params> {
         None
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -141,11 +165,14 @@ impl<S: Service> SonyBraviaTvCommand for GetMethodTypes<S> {
     const SERVICE: &str = S::NAME;
     const METHOD: &str = "getMethodTypes";
     const VERSION: &str = "1.0";
+
     type Params = String;
     type Response = Vec<MethodType>;
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.version_filter.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         json::from_value(result.into())
     }

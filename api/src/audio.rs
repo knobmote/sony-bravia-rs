@@ -21,11 +21,14 @@ impl SonyBraviaTvCommand for GetSoundSettings {
     const SERVICE: &str = "audio";
     const METHOD: &str = "getSoundSettings";
     const VERSION: &str = "1.1";
+
     type Params = Self;
     type Response = Vec<SoundSetting>;
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }

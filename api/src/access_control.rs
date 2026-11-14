@@ -33,17 +33,21 @@ impl SonyBraviaTvCommand for ActRegister {
     const SERVICE: &str = "accessControl";
     const METHOD: &str = "actRegister";
     const VERSION: &str = "1.0";
+
     type Params = (RegistrationClient, Vec<RegistrationFunction>);
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some((self.client.clone(), self.functions.clone()))
     }
+
     fn encode_params(&self) -> json::Result<Vec<json::Value>> {
         Ok(vec![
             json::to_value(&self.client)?,
             json::to_value(&self.functions)?,
         ])
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }

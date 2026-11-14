@@ -12,11 +12,14 @@ impl SonyBraviaTvCommand for SetCecControlMode {
     const SERVICE: &str = "cec";
     const METHOD: &str = "setCecControlMode";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(*self)
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -32,11 +35,14 @@ impl SonyBraviaTvCommand for SetMhlPowerFeedMode {
     const SERVICE: &str = "cec";
     const METHOD: &str = "setMhlPowerFeedMode";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(*self)
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -54,11 +60,14 @@ impl SonyBraviaTvCommand for SetPowerSyncMode {
     const SERVICE: &str = "cec";
     const METHOD: &str = "setPowerSyncMode";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(*self)
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -74,11 +83,14 @@ impl SonyBraviaTvCommand for SetMhlAutoInputChangeMode {
     const SERVICE: &str = "cec";
     const METHOD: &str = "setMhlAutoInputChangeMode";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(*self)
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }

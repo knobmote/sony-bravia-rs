@@ -21,11 +21,14 @@ impl SonyBraviaTvCommand for GetTextForm {
     const SERVICE: &str = "appControl";
     const METHOD: &str = "getTextForm";
     const VERSION: &str = "1.1";
+
     type Params = Self;
     type Response = TextForm;
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -45,11 +48,14 @@ impl SonyBraviaTvCommand for SetTextFormV1_1 {
     const SERVICE: &str = "appControl";
     const METHOD: &str = "setTextForm";
     const VERSION: &str = "1.1";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }

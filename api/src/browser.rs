@@ -21,11 +21,14 @@ impl SonyBraviaTvCommand for GetTextUrl {
     const SERVICE: &str = "browser";
     const METHOD: &str = "getTextUrl";
     const VERSION: &str = "1.0";
+
     type Params = ();
     type Response = BrowserPage;
+
     fn params(&self) -> Option<Self::Params> {
         None
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -47,11 +50,14 @@ impl SonyBraviaTvCommand for SetTextUrl {
     const SERVICE: &str = "browser";
     const METHOD: &str = "setTextUrl";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         zero(result)
     }
@@ -67,11 +73,14 @@ impl SonyBraviaTvCommand for ActBrowserControl {
     const SERVICE: &str = "browser";
     const METHOD: &str = "actBrowserControl";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         zero(result)
     }

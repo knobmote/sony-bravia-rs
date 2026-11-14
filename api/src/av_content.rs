@@ -24,11 +24,14 @@ impl SonyBraviaTvCommand for SetFavoriteContentList {
     const SERVICE: &str = "avContent";
     const METHOD: &str = "setFavoriteContentList";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -46,11 +49,14 @@ impl SonyBraviaTvCommand for SetDeleteProtection {
     const SERVICE: &str = "avContent";
     const METHOD: &str = "setDeleteProtection";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -66,11 +72,14 @@ impl SonyBraviaTvCommand for DeleteContent {
     const SERVICE: &str = "avContent";
     const METHOD: &str = "deleteContent";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -102,11 +111,14 @@ impl SonyBraviaTvCommand for SetPlayTvContentV1_1 {
     const SERVICE: &str = "avContent";
     const METHOD: &str = "setPlayTvContent";
     const VERSION: &str = "1.1";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -116,11 +128,14 @@ impl SonyBraviaTvCommand for SetPlayTvContent {
     const SERVICE: &str = "avContent";
     const METHOD: &str = "setPlayTvContent";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -149,11 +164,14 @@ impl SonyBraviaTvCommand for SetTvContentVisibility {
     const SERVICE: &str = "avContent";
     const METHOD: &str = "setTvContentVisibility";
     const VERSION: &str = "1.0";
+
     type Params = Vec<TvContentVisibility>;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.items.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -184,11 +202,14 @@ impl SonyBraviaTvCommand for GetParentalRatingSettings {
     const SERVICE: &str = "avContent";
     const METHOD: &str = "getParentalRatingSettings";
     const VERSION: &str = "1.0";
+
     type Params = ();
     type Response = ParentalRatingSettings;
+
     fn params(&self) -> Option<Self::Params> {
         None
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -208,11 +229,14 @@ impl SonyBraviaTvCommand for GetContentCountV1_1 {
     const SERVICE: &str = "avContent";
     const METHOD: &str = "getContentCount";
     const VERSION: &str = "1.1";
+
     type Params = Self;
     type Response = ContentCount;
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -222,11 +246,14 @@ impl SonyBraviaTvCommand for GetFavoriteList {
     const SERVICE: &str = "avContent";
     const METHOD: &str = "getFavoriteList";
     const VERSION: &str = "1.0";
+
     type Params = ();
     type Response = Vec<FavoriteSource>;
+
     fn params(&self) -> Option<Self::Params> {
         None
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -251,11 +278,14 @@ impl SonyBraviaTvCommand for GetCurrentExternalInputsStatusV1_1 {
     const SERVICE: &str = "avContent";
     const METHOD: &str = "getCurrentExternalInputsStatus";
     const VERSION: &str = "1.1";
+
     type Params = ();
     type Response = Vec<ExternalInputV1_1>;
+
     fn params(&self) -> Option<Self::Params> {
         None
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -454,11 +484,14 @@ impl SonyBraviaTvCommand for GetContentListV1_0 {
     const SERVICE: &str = "avContent";
     const METHOD: &str = "getContentList";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = Vec<Content>;
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -482,11 +515,14 @@ impl SonyBraviaTvCommand for GetContentListV1_2 {
     const SERVICE: &str = "avContent";
     const METHOD: &str = "getContentList";
     const VERSION: &str = "1.2";
+
     type Params = Self;
     type Response = Vec<Content>;
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }

@@ -18,11 +18,14 @@ impl SonyBraviaTvCommand for GetDeviceMode {
     const SERVICE: &str = "system";
     const METHOD: &str = "getDeviceMode";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = DeviceMode;
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -40,11 +43,14 @@ impl SonyBraviaTvCommand for SetDeviceMode {
     const SERVICE: &str = "system";
     const METHOD: &str = "setDeviceMode";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -60,11 +66,14 @@ impl SonyBraviaTvCommand for MountStorage {
     const SERVICE: &str = "system";
     const METHOD: &str = "mountStorage";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
@@ -102,11 +111,14 @@ impl SonyBraviaTvCommand for GetStorageList {
     const SERVICE: &str = "system";
     const METHOD: &str = "getStorageList";
     const VERSION: &str = "1.1";
+
     type Params = Self;
     type Response = Vec<StorageInfo>;
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         single(result)
     }
@@ -122,11 +134,14 @@ impl SonyBraviaTvCommand for SetLanguage {
     const SERVICE: &str = "system";
     const METHOD: &str = "setLanguage";
     const VERSION: &str = "1.0";
+
     type Params = Self;
     type Response = ();
+
     fn params(&self) -> Option<Self::Params> {
         Some(self.clone())
     }
+
     fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(result)
     }
