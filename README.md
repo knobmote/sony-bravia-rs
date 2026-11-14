@@ -1,5 +1,8 @@
 # SONY BRAVIA TV REST API
 
+See [API coverage](API_COVERAGE.md) for the documented methods, implemented
+versions, authentication levels, model restrictions, and observed TV results.
+
 The `sony-bravia-api` crate defines Sony REST API commands and their typed results.
 Commands are grouped by service: `guide`, `system`, `audio`, `av_content`,
 `app_control`, `encryption`, `video`, and `video_screen`.
