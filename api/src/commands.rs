@@ -1,25 +1,24 @@
 //! Helpers for Sony's fixed-length result arrays.
+use de::Error as _;
 
 use super::*;
 
-pub(crate) fn single<T: DeserializeOwned>(value: Value) -> json::Result<T> {
-    let [value] = json::from_value::<[T; 1]>(value)?;
+pub(crate) fn single<T: de::DeserializeOwned>(value: Vec<json::Value>) -> json::Result<T> {
+    let [value] = json::from_value::<[T; 1]>(value.into())?;
     Ok(value)
 }
 
-pub(crate) fn empty(value: Value) -> json::Result<()> {
-    let []: [Value; 0] = json::from_value(value)?;
+pub(crate) fn empty(value: Vec<json::Value>) -> json::Result<()> {
+    let [] = json::from_value::<[json::Value; 0]>(value.into())?;
     Ok(())
 }
 
-pub(crate) fn zero(value: Value) -> json::Result<()> {
-    let [value]: [i32; 1] = json::from_value(value)?;
+pub(crate) fn zero(value: Vec<json::Value>) -> json::Result<()> {
+    let value = single::<i32>(value)?;
     if value == 0 {
         Ok(())
     } else {
-        Err(<json::Error as serde::de::Error>::custom(
-            "expected zero result",
-        ))
+        Err(json::Error::custom("expected zero result"))
     }
 }
 
@@ -32,8 +31,8 @@ mod tests {
         command: C,
         method: &str,
         version: &str,
-        params: Value,
-        result: Value,
+        params: json::Value,
+        result: json::Value,
     ) -> C::Response {
         let id = NonZeroI32::new(7).unwrap();
 
@@ -89,8 +88,8 @@ mod tests {
                 json::json!([0]),
             );
         }
-        assert!(audio::SetAudioMute::decode_response(json::json!([1])).is_err());
-        assert!(audio::SetAudioVolume::decode_response(json::json!([])).is_err());
+        assert!(audio::SetAudioMute::decode_response(vec![json::json!(1)]).is_err());
+        assert!(audio::SetAudioVolume::decode_response(vec![]).is_err());
 
         let settings = check(
             audio::GetSpeakerSettings {

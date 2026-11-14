@@ -24,7 +24,7 @@ impl SonyBraviaTvCommand for GetPublicKey {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }

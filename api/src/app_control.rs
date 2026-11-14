@@ -26,7 +26,7 @@ impl SonyBraviaTvCommand for GetApplicationList {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -53,7 +53,7 @@ impl SonyBraviaTvCommand for GetApplicationStatusList {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -76,7 +76,7 @@ impl SonyBraviaTvCommand for SetActiveApp {
         Some(self.clone())
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(value)
     }
 }
@@ -97,7 +97,7 @@ impl SonyBraviaTvCommand for TerminateApps {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(value)
     }
 }
@@ -125,7 +125,7 @@ impl SonyBraviaTvCommand for GetWebAppStatus {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -148,7 +148,7 @@ impl SonyBraviaTvCommand for SetTextForm {
         Some(self.text.clone())
     }
 
-    fn decode_response(result: Value) -> json::Result<Self::Response> {
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
         zero(result)
     }
 }

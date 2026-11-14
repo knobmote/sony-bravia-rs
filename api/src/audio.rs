@@ -29,7 +29,7 @@ impl SonyBraviaTvCommand for GetVolumeInformation {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -53,7 +53,7 @@ impl SonyBraviaTvCommand for SetAudioMute {
         Some(*self)
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         zero(value)
     }
 }
@@ -108,7 +108,7 @@ impl SonyBraviaTvCommand for SetAudioVolume {
         Some(*self)
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         zero(value)
     }
 }
@@ -139,7 +139,7 @@ impl SonyBraviaTvCommand for GetSpeakerSettings {
         Some(self.clone())
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -169,7 +169,7 @@ impl SonyBraviaTvCommand for SetSpeakerSettings {
         Some(self.clone())
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(value)
     }
 }
@@ -192,7 +192,7 @@ impl SonyBraviaTvCommand for SetSoundSettings {
         Some(self.clone())
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(value)
     }
 }
@@ -225,7 +225,7 @@ impl SonyBraviaTvCommand for SetAudioVolumeV1_2 {
         Some(self.clone())
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(value)
     }
 }

@@ -23,7 +23,7 @@ impl SonyBraviaTvCommand for GetScreenRotation {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -46,7 +46,7 @@ impl SonyBraviaTvCommand for SetScreenRotation {
         Some(*self)
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(value)
     }
 }
@@ -93,7 +93,7 @@ impl SonyBraviaTvCommand for GetPictureQualitySettings {
         Some(self.clone())
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -123,7 +123,7 @@ impl SonyBraviaTvCommand for SetPictureQualitySettings {
         Some(self.clone())
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(value)
     }
 }

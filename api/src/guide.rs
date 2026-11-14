@@ -43,7 +43,7 @@ impl SonyBraviaTvCommand for GetSupportedApiInfo {
         Some(self.clone())
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }

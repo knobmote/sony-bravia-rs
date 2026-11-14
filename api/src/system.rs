@@ -33,9 +33,8 @@ impl SonyBraviaTvCommand for GetPowerStatus {
         None
     }
 
-    fn decode_response(result: json::Value) -> json::Result<Self::Response> {
-        let [result]: [PowerStatusResult; 1] = json::from_value(result)?;
-        Ok(result.status)
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        single::<PowerStatusResult>(result).map(|result| result.status)
     }
 }
 
@@ -57,9 +56,8 @@ impl SonyBraviaTvCommand for SetPowerStatus {
         Some(*self)
     }
 
-    fn decode_response(result: json::Value) -> json::Result<Self::Response> {
-        let []: [json::Value; 0] = json::from_value(result)?;
-        Ok(())
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        empty(result)
     }
 }
 
@@ -96,7 +94,7 @@ impl SonyBraviaTvCommand for GetSystemInformation {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -117,7 +115,7 @@ impl SonyBraviaTvCommand for GetCurrentTime {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -143,7 +141,7 @@ impl SonyBraviaTvCommand for GetWolMode {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -166,7 +164,7 @@ impl SonyBraviaTvCommand for SetWolMode {
         Some(*self)
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(value)
     }
 }
@@ -187,7 +185,7 @@ impl SonyBraviaTvCommand for RequestReboot {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(value)
     }
 }
@@ -218,7 +216,7 @@ impl SonyBraviaTvCommand for GetInterfaceInformation {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -245,9 +243,9 @@ impl SonyBraviaTvCommand for GetRemoteControllerInfo {
         None
     }
 
-    fn decode_response(result: Value) -> json::Result<Self::Response> {
-        let (_, buttons): (serde::de::IgnoredAny, Vec<RemoteButton>) = json::from_value(result)?;
-        Ok(buttons)
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        json::from_value::<(de::IgnoredAny, Vec<RemoteButton>)>(result.into())
+            .map(|(_, buttons)| buttons)
     }
 }
 
@@ -273,7 +271,7 @@ impl SonyBraviaTvCommand for GetSystemSupportedFunction {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -299,7 +297,7 @@ impl SonyBraviaTvCommand for GetPowerSavingMode {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -322,7 +320,7 @@ impl SonyBraviaTvCommand for SetPowerSavingMode {
         Some(self.clone())
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(value)
     }
 }
@@ -349,7 +347,7 @@ impl SonyBraviaTvCommand for GetLedIndicatorStatus {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -374,7 +372,7 @@ impl SonyBraviaTvCommand for SetLedIndicatorStatus {
         Some(self.clone())
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         empty(value)
     }
 }
@@ -403,7 +401,7 @@ impl SonyBraviaTvCommand for GetCurrentTimeV1_1 {
         None
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -441,7 +439,7 @@ impl SonyBraviaTvCommand for GetNetworkSettings {
         Some(self.clone())
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }
@@ -472,7 +470,7 @@ impl SonyBraviaTvCommand for GetRemoteDeviceSettings {
         Some(self.clone())
     }
 
-    fn decode_response(value: Value) -> json::Result<Self::Response> {
+    fn decode_response(value: Vec<json::Value>) -> json::Result<Self::Response> {
         single(value)
     }
 }

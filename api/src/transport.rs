@@ -54,9 +54,7 @@ pub enum Response {
 }
 
 fn reject_result<'de, D: serde::Deserializer<'de>>(_deserializer: D) -> Result<(), D::Error> {
-    Err(serde::de::Error::custom(
-        "unexpected result in error response",
-    ))
+    Err(de::Error::custom("unexpected result in error response"))
 }
 
 impl Response {
@@ -80,7 +78,7 @@ impl Response {
         T: SonyBraviaTvCommand,
     {
         let response = match self {
-            Self::Success { result, .. } => Ok(T::decode_response(json::Value::Array(result))?),
+            Self::Success { result, .. } => Ok(T::decode_response(result)?),
             Self::Failure { error, .. } => Err(error),
         };
         Ok(response)
@@ -105,9 +103,8 @@ mod tests {
             None
         }
 
-        fn decode_response(result: json::Value) -> json::Result<Self::Response> {
-            let _ = result;
-            todo!()
+        fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+            json::from_value(result.into())
         }
     }
 

@@ -3,9 +3,8 @@ use std::num::NonZeroI32;
 
 use serde::Deserialize;
 use serde::Serialize;
-use serde::de::DeserializeOwned;
+use serde::de;
 use serde_json as json;
-use serde_json::Value;
 
 use commands::empty;
 use commands::single;
@@ -44,5 +43,5 @@ pub trait SonyBraviaTvCommand {
     fn params(&self) -> Option<Self::Params>;
 
     /// Decode the complete `result` array into the command's response.
-    fn decode_response(result: json::Value) -> json::Result<Self::Response>;
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response>;
 }
