@@ -95,6 +95,16 @@ Use `mute off`, `power off`, or `volume headphone LEVEL` as needed. `playing`
 and `wol` read the current content and Wake-on-LAN setting where supported. The
 input command accepts a URI reported by `inputs`; availability depends on the TV.
 
+To list launchable apps and start one by its reported URI:
+
+```sh
+cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 apps
+cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 app 'APP_URI'
+```
+
+`app-status` displays the TV's application status values; those values do not
+necessarily identify the currently displayed app.
+
 For a wider read-only compatibility check, run:
 
 ```sh

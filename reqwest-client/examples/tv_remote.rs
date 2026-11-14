@@ -3,6 +3,9 @@
 use std::env;
 use std::error::Error;
 
+use sony_bravia_api::app_control::GetApplicationList;
+use sony_bravia_api::app_control::GetApplicationStatusList;
+use sony_bravia_api::app_control::SetActiveApp;
 use sony_bravia_api::audio::AudioTarget;
 use sony_bravia_api::audio::GetVolumeInformation;
 use sony_bravia_api::audio::SetAudioMute;
@@ -16,7 +19,7 @@ use sony_bravia_api::system::GetWolMode;
 use sony_bravia_api::system::SetPowerStatus;
 use sony_bravia_reqwest::Client;
 
-const USAGE: &str = "usage: tv_remote URL power [on|off] | audio | mute on|off | volume speaker|headphone LEVEL | inputs | input URI | playing | wol";
+const USAGE: &str = "usage: tv_remote URL power [on|off] | audio | mute on|off | volume speaker|headphone LEVEL | inputs | input URI | playing | wol | apps | app-status | app URI";
 
 #[derive(Debug)]
 enum Command {
@@ -28,6 +31,9 @@ enum Command {
     Input(String),
     Playing,
     Wol,
+    Apps,
+    AppStatus,
+    App(String),
 }
 
 fn parse_command(args: &[String]) -> Result<Command, &'static str> {
@@ -57,6 +63,9 @@ fn parse_command(args: &[String]) -> Result<Command, &'static str> {
         [command, uri] if command == "input" && !uri.is_empty() => Ok(Command::Input(uri.clone())),
         [command] if command == "playing" => Ok(Command::Playing),
         [command] if command == "wol" => Ok(Command::Wol),
+        [command] if command == "apps" => Ok(Command::Apps),
+        [command] if command == "app-status" => Ok(Command::AppStatus),
+        [command, uri] if command == "app" && !uri.is_empty() => Ok(Command::App(uri.clone())),
         _ => Err(USAGE),
     }
 }
@@ -99,6 +108,17 @@ async fn main() -> Result<(), Box<dyn Error>> {
         Command::Input(uri) => client.execute(SetPlayContent { uri }).await?,
         Command::Playing => println!("{:?}", client.execute(GetPlayingContentInfo).await?),
         Command::Wol => println!("{:?}", client.execute(GetWolMode).await?),
+        Command::Apps => {
+            for app in client.execute(GetApplicationList).await? {
+                println!("{}: {}", app.title, app.uri);
+            }
+        }
+        Command::AppStatus => {
+            for status in client.execute(GetApplicationStatusList).await? {
+                println!("{}: {}", status.name, status.status);
+            }
+        }
+        Command::App(uri) => client.execute(SetActiveApp { uri }).await?,
     }
     Ok(())
 }
@@ -133,11 +153,21 @@ mod tests {
             parse_command(&args(&["input", "extInput:hdmi?port=1"])),
             Ok(Command::Input(_))
         ));
+        assert!(matches!(parse_command(&args(&["apps"])), Ok(Command::Apps)));
+        assert!(matches!(
+            parse_command(&args(&["app-status"])),
+            Ok(Command::AppStatus)
+        ));
+        assert!(matches!(
+            parse_command(&args(&["app", "app:example"])),
+            Ok(Command::App(_))
+        ));
         for values in [
             &["power", "toggle"][..],
             &["volume", "speaker", "-1"],
             &["mute"],
             &["input", ""],
+            &["app", ""],
             &["audio", "extra"],
         ] {
             assert!(parse_command(&args(values)).is_err());
