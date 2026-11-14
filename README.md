@@ -79,6 +79,17 @@ so the key travels over the network unencrypted; use it on a trusted network.
 It reports transport, HTTP, Sony API, and response decoding errors. The host-only
 HTTP dependency is confined to the `sony-bravia-reqwest` crate.
 
+For a wider read-only compatibility check, run:
+
+```sh
+cargo run -p sony-bravia-reqwest --example tv_validate -- http://192.168.1.100
+```
+
+It reports each command's result without printing the returned device data, and
+exits unsuccessfully if any command fails. A failure may indicate an unsupported
+method, missing authentication, or the TV's current state as well as a client
+or response decoding problem.
+
 Support varies by display, firmware, region, and authentication level. Some
 professional-display APIs are localhost-only. The command definitions do not yet
 cover every method or version in Sony's reference.
