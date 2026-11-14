@@ -30,6 +30,8 @@ pub use transport::Response;
 pub mod app_control;
 pub mod audio;
 pub mod av_content;
+pub mod browser;
+pub mod cec;
 pub mod discovery;
 pub mod encryption;
 pub mod guide;

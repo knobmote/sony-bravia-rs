@@ -243,6 +243,41 @@ mod tests {
     }
 
     #[test]
+    fn browser_and_cec_command_shapes() {
+        check(
+            browser::SetTextUrl {
+                url: "https://example.org".into(),
+                title: None,
+                kind: None,
+                favicon: None,
+            },
+            "setTextUrl",
+            "1.0",
+            json::json!([{"url":"https://example.org"}]),
+            json::json!([0]),
+        );
+        check(
+            browser::ActBrowserControl {
+                control: "back".into(),
+            },
+            "actBrowserControl",
+            "1.0",
+            json::json!([{"control":"back"}]),
+            json::json!([0]),
+        );
+        check(
+            cec::SetPowerSyncMode {
+                sink_power_off_sync: true,
+                source_power_on_sync: false,
+            },
+            "setPowerSyncMode",
+            "1.0",
+            json::json!([{"sinkPowerOffSync":true,"sourcePowerOnSync":false}]),
+            json::json!([]),
+        );
+    }
+
+    #[test]
     fn discovery_system_and_video_shapes() {
         let services = check(
             guide::GetSupportedApiInfo::default(),
