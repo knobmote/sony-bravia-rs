@@ -140,6 +140,52 @@ mod tests {
 
     #[test]
     fn input_and_application_shapes() {
+        check(
+            av_content::SetFavoriteContentList {
+                fav_source: "fav:1".into(),
+                contents: vec!["tv:1".into()],
+            },
+            "setFavoriteContentList",
+            "1.0",
+            json::json!([{"favSource":"fav:1","contents":["tv:1"]}]),
+            json::json!([]),
+        );
+        check(
+            av_content::SetTvContentVisibility {
+                items: vec![av_content::TvContentVisibility {
+                    uri: "tv:1".into(),
+                    epg_visibility: None,
+                    channel_surfing_visibility: None,
+                    visibility: Some("visible".into()),
+                }],
+            },
+            "setTvContentVisibility",
+            "1.0",
+            json::json!([[{"uri":"tv:1","visibility":"visible"}]]),
+            json::json!([]),
+        );
+        let list = check(
+            av_content::GetContentListV1_2 {
+                source: "extInput:hdmi".into(),
+                start_index: Some(0),
+                count: Some(1),
+                content_type: None,
+                target: None,
+            },
+            "getContentList",
+            "1.2",
+            json::json!([{"source":"extInput:hdmi","stIdx":0,"cnt":1}]),
+            json::json!([[{"uri":"extInput:hdmi?port=1","title":"HDMI 1","index":0}]]),
+        );
+        assert_eq!(list[0].title.as_deref(), Some("HDMI 1"));
+        let rating = check(
+            av_content::GetParentalRatingSettings,
+            "getParentalRatingSettings",
+            "1.0",
+            json::json!([]),
+            json::json!([{"ratingTypeAge":12,"unratedLock":false}]),
+        );
+        assert_eq!(rating.rating_type_age, Some(12));
         let favorites = check(
             av_content::GetFavoriteList,
             "getFavoriteList",

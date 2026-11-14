@@ -11,10 +11,14 @@ use sony_bravia_api::audio::GetSoundSettings;
 use sony_bravia_api::audio::GetSpeakerSettings;
 use sony_bravia_api::audio::GetVolumeInformation;
 use sony_bravia_api::av_content::GetContentCount;
+use sony_bravia_api::av_content::GetContentCountV1_1;
 use sony_bravia_api::av_content::GetContentList;
+use sony_bravia_api::av_content::GetContentListV1_0;
+use sony_bravia_api::av_content::GetContentListV1_2;
 use sony_bravia_api::av_content::GetCurrentExternalInputsStatus;
 use sony_bravia_api::av_content::GetCurrentExternalInputsStatusV1_1;
 use sony_bravia_api::av_content::GetFavoriteList;
+use sony_bravia_api::av_content::GetParentalRatingSettings;
 use sony_bravia_api::av_content::GetPlayingContentInfo;
 use sony_bravia_api::av_content::GetSchemeList;
 use sony_bravia_api::av_content::GetSourceList;
@@ -103,6 +107,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         check(&mut client, GetCurrentExternalInputsStatus).await,
         check(&mut client, GetCurrentExternalInputsStatusV1_1).await,
         check(&mut client, GetFavoriteList).await,
+        check(&mut client, GetParentalRatingSettings).await,
         check(&mut client, GetPlayingContentInfo).await,
         check(&mut client, GetSchemeList).await,
         check(&mut client, GetApplicationList).await,
@@ -131,6 +136,42 @@ async fn main() -> Result<(), Box<dyn Error>> {
                         &mut client,
                         GetContentCount {
                             source: source.source.clone(),
+                        },
+                    )
+                    .await,
+                );
+                results.push(
+                    check(
+                        &mut client,
+                        GetContentCountV1_1 {
+                            source: source.source.clone(),
+                            content_type: None,
+                            target: None,
+                        },
+                    )
+                    .await,
+                );
+                results.push(
+                    check(
+                        &mut client,
+                        GetContentListV1_0 {
+                            source: source.source.clone(),
+                            start_index: Some(0),
+                            count: Some(1),
+                            content_type: None,
+                        },
+                    )
+                    .await,
+                );
+                results.push(
+                    check(
+                        &mut client,
+                        GetContentListV1_2 {
+                            source: source.source.clone(),
+                            start_index: Some(0),
+                            count: Some(1),
+                            content_type: None,
+                            target: None,
                         },
                     )
                     .await,
