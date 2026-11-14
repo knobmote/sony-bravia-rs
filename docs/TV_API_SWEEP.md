@@ -1,10 +1,10 @@
 # Real-TV REST API sweep
 
-Snapshot: 2026-11-14. This is one TV and firmware, not a claim about all BRAVIA devices. The sweep used the pre-shared key; it did not modify the TV or retain response values, credentials, or app/content titles.
+Snapshot: 2026-11-14. This is a historical sweep of one TV and firmware, not a claim about all BRAVIA devices. Implementation coverage has since expanded; see the current [coverage matrix](../API_COVERAGE.md). The sweep used the pre-shared key; it did not modify the TV or retain response values, credentials, or app/content titles.
 
 All 11 advertised services answered `getMethodTypes` and `getVersions`. The 104 advertised service/method/version combinations exactly matched the method signatures returned by those services. The sanitized [machine-readable signatures](tv-api-signatures.json) preserve the TV’s parameter and result descriptions, which are type hints rather than a complete validation schema.
 
-The current authenticated typed validator passed 25 of 28 commands. The three failures were `IllegalState` for playing content and scene settings, and `NoSuchMethod` for screen rotation (not advertised). Successful raw calls are not proof that the Rust decoder accepts the response.
+At the time of this sweep, the authenticated typed validator passed 25 of 28 commands; subsequent expansion passed 39 of 42. The three failures were `IllegalState` for playing content and scene settings, and `NoSuchMethod` for screen rotation (not advertised). Successful raw calls are not proof that the Rust decoder accepts the response.
 
 Every listed state-changing, registration, deletion, reboot, and notification-request method was left untouched in this sweep. Four controls had been separately verified in earlier, explicitly authorized live tests. The browser URL and text-form getters were not read to avoid collecting on-screen data.
 
@@ -16,7 +16,7 @@ Where applicable, GET methods were called with an empty/default filter. Content 
 - `avContent/getFavoriteList` returned four `fav` sources. A one-item page from each was empty; this does not demonstrate an app-favorites list.
 - Raw audio sound-settings, external-input status v1.1, parental-rating settings, picture settings, network settings, and several multi-screen getters returned data. Successful typed operations are marked separately below.
 - `system/getDeviceMode` rejected the empty filter with error 3; a valid value has not been established. `system/getStorageList`, `avContent/getPlayingContentInfo`, and `videoScreen/getSceneSetting` returned error 7 in the current state.
-- `getMethodTypes` and `guide/getServiceProtocols` return a `results` field on this TV; the current standard response decoder expects `result`. Their successful raw calls therefore do not establish support in the typed client.
+- `getMethodTypes` and `guide/getServiceProtocols` return a `results` field on this TV; the decoder at sweep time expected only `result`. The client now accepts both envelopes, and typed `getMethodTypes` and `getServiceProtocols` passed against the TV.
 - `getContentList` 1.0, 1.2, and 1.5 and `getContentCount` 1.0 and 1.1 returned data for an external-input source. The existing typed v1.0 count and v1.5 list commands also passed.
 
 ## Method-by-method results

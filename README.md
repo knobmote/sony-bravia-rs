@@ -4,8 +4,9 @@ See [API coverage](API_COVERAGE.md) for the documented methods, implemented
 versions, authentication levels, model restrictions, and observed TV results.
 
 The `sony-bravia-api` crate defines Sony REST API commands and their typed results.
-Commands are grouped by service: `guide`, `system`, `audio`, `av_content`,
-`app_control`, `encryption`, `video`, and `video_screen`.
+Commands are grouped by service: `access_control`, `app_control`, `audio`,
+`av_content`, `browser`, `cec`, `encryption`, `guide`, `system`, `video`, and
+`video_screen`. The `discovery` module provides common service methods.
 
 The `sony-bravia-client` crate provides a sans-I/O client. It prepares the
 request path and JSON body, assigns request IDs, and decodes responses into the

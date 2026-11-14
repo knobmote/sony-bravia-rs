@@ -79,3 +79,19 @@ impl SonyBraviaTvCommand for GetSupportedApiInfo {
         single(value)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn decodes_service_protocols_results_envelope() {
+        let response = Response::from_json(
+            r#"{"id":1,"results":[["audio",["xhrpost:jsonizer"]],["guide",["xhrpost:jsonizer"]]]}"#,
+        )
+        .unwrap();
+        let services = response.response::<GetServiceProtocols>().unwrap().unwrap();
+        assert_eq!(services[0].service, "audio");
+        assert_eq!(services[0].protocols, ["xhrpost:jsonizer"]);
+    }
+}

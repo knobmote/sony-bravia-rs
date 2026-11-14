@@ -4,9 +4,9 @@ Snapshot: 2026-11-14. Source: [Sony BRAVIA Professional Displays REST API refere
 
 This is a method/version inventory, not a guarantee that every field, parameter, response shape, or error has been fully validated. Some device capabilities are absent from Sony’s published professional-display reference. The TV discovery snapshot below comes from `guide/getSupportedApiInfo` on the user’s TV and is specific to that device and firmware.
 
-The reference contains 59 distinct service/method/version combinations; this repository defines typed commands for 45. The TV advertised 104 combinations, including 57 outside that reference snapshot. Those counts describe this snapshot, not a guarantee of implementation correctness or interoperability.
+The reference contains 59 distinct service/method/version combinations; this repository defines typed commands for 49. The TV advertised 104 combinations, including 57 outside that reference snapshot. Those counts describe this snapshot, not a guarantee of implementation correctness or interoperability.
 
-A later [real-TV method sweep](docs/TV_API_SWEEP.md) records every advertised signature and the latest read-only results.
+The [real-TV method sweep](docs/TV_API_SWEEP.md) records every advertised signature. For current implementation notes, see [discovered methods](docs/DISCOVERED_METHODS.md).
 
 ## Reading the tables
 
@@ -30,13 +30,13 @@ A later [real-TV method sweep](docs/TV_API_SWEEP.md) records every advertised si
 | --- | --- | --- | --- | --- | --- |
 | [`getApplicationList`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-1774) | 1.0 | private | [`GetApplicationList`](api/src/app_control.rs) | Yes (private) | Pass |
 | [`getApplicationStatusList`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-1809) | 1.0 | none | [`GetApplicationStatusList`](api/src/app_control.rs) | Yes (none) | Pass |
-| [`getTextForm`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-1843) | 1.1 | private | Not implemented | Yes (private) | Not tested |
+| [`getTextForm`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-1843) | 1.1 | private | [`GetTextForm`](api/src/app_control.rs) | Yes (private) | Not tested |
 | [`getWebAppStatus`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-1856) | 1.0 | private | [`GetWebAppStatus`](api/src/app_control.rs) | Yes (private) | Pass |
 | [`installApp`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-13051) | 1.0 | generic | Not implemented | — | Not tested |
 | [`prepareAppUpload`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-13043) | 1.0 | generic | Not implemented | — | Not tested |
 | [`setActiveApp`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2044) | 1.0 | generic | [`SetActiveApp`](api/src/app_control.rs) | Yes (generic) | Pass |
 | [`setTextForm`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2219) | 1.0 | generic | [`SetTextForm`](api/src/app_control.rs) | Yes (generic) | Not tested |
-| [`setTextForm`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2225) | 1.1 | generic | Not implemented | Yes (generic) | Not tested |
+| [`setTextForm`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2225) | 1.1 | generic | [`SetTextFormV1_1`](api/src/app_control.rs) | Yes (generic) | Not tested |
 | [`terminateApps`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2216) | 1.0 | generic | [`TerminateApps`](api/src/app_control.rs) | Yes (generic) | Not tested |
 | [`uninstallApp`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-13072) | 1.0 | generic | Not implemented | — | Not tested |
 
@@ -57,11 +57,11 @@ A later [real-TV method sweep](docs/TV_API_SWEEP.md) records every advertised si
 | Method | Version | Reference auth | Implementation | TV advertised (auth) | Live result |
 | --- | --- | --- | --- | --- | --- |
 | [`setPlayContent`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2055) | 1.0 | generic | [`SetPlayContent`](api/src/av_content.rs) | Yes (generic) | Not tested |
-| [`getCurrentExternalInputsStatus`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2064) | 1.1 | none | Not implemented | Yes (none) | Raw pass |
+| [`getCurrentExternalInputsStatus`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2064) | 1.1 | none | [`GetCurrentExternalInputsStatusV1_1`](api/src/av_content.rs) | Yes (none) | Pass |
 | [`getCurrentExternalInputsStatus`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2078) | 1.0 | none | [`GetCurrentExternalInputsStatus`](api/src/av_content.rs) | Yes (none) | Pass |
 | [`getPlayingContentInfo`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2060) | 1.0 | private | [`GetPlayingContentInfo`](api/src/av_content.rs) | Yes (private) | IllegalState |
 | [`getContentCount`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2099) | 1.0 | private | [`GetContentCount`](api/src/av_content.rs) | Yes (private) | Pass |
-| [`getContentCount`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2093) | 1.1 | private | Not implemented | Yes (private) | Raw pass |
+| [`getContentCount`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2093) | 1.1 | private | [`GetContentCountV1_1`](api/src/av_content.rs) | Yes (private) | Pass |
 | [`getContentList`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2083) | 1.5 | private | [`GetContentList`](api/src/av_content.rs) | Yes (private) | Pass |
 | [`getSchemeList`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2074) | 1.0 | none | [`GetSchemeList`](api/src/av_content.rs) | Yes (none) | Pass |
 | [`getSourceList`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2069) | 1.0 | none | [`GetSourceList`](api/src/av_content.rs) | Yes (none) | Pass |
@@ -124,132 +124,132 @@ A later [real-TV method sweep](docs/TV_API_SWEEP.md) records every advertised si
 - `system/getSettingsSchema`, `getSettings`, and `setSettings`: localhost-only on supported FW-BZxxxP firmware/generation versions.
 - `video/getScreenRotation` and `setScreenRotation`: Sony describes these as localhost-only on supported FW-BZxxx firmware/generation versions.
 - `audio/getSpeakerSettings` and `setSpeakerSettings`, and `videoScreen/getSceneSetting` and `setSceneSetting`: Sony says BZ40P/BZ35P/BZ30P are unsupported.
-- Sony documents regional restrictions for `appControl/setTextForm` and one of its two `getTextForm` v1.1 entries. The `getTextForm` entries describe `encKey` as optional but also say it must always be set; the table groups them by method/version and links the first entry. Consult [the second entry](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-35945) before implementing.
+- Sony documents regional restrictions for `appControl/setTextForm` and one of its two `getTextForm` v1.1 entries. The `getTextForm` entries describe `encKey` as optional but also say it must always be set; the table groups them by method/version and links the first entry. Consult [the second entry](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-35945) before relying on this method.
 - Authentication in Sony’s reference is not identical to every practical access policy; for example, the TV returned HTTP 403 for some private or generic calls without the pre-shared key.
 
 ## Real-TV validation detail
 
-- Authenticated typed read-only sweep: 25/28 succeeded (including bounded source browsing). `getPlayingContentInfo` and `getSceneSetting` returned `IllegalState`; `getScreenRotation` returned `NoSuchMethod`.
+- Authenticated typed read-only validator: 39/42 succeeded (including bounded source browsing). `getPlayingContentInfo` and `getSceneSetting` returned `IllegalState`; `getScreenRotation` returned `NoSuchMethod`.
 - Authenticated state-changing checks: mute on/off, volume 22 → 21 → 22, and power standby → active succeeded; audio was restored. Two app activations (Netflix and YouTube) were visually confirmed.
 - Input enumeration and content browsing succeeded; input switching was not tried because the original input could not be reliably determined for restoration. No prolonged deep-standby or Wake-on-LAN packet test was performed.
 - TV app icons are served over HTTP; sample downloads succeeded without authentication. The observed icon `Content-Type` header was malformed, despite valid PNG data.
 
 ## Additional methods advertised by this TV
 
-These exact service/method/version combinations were advertised by the TV but do not appear in the reference snapshot above. Their authentication levels below are from TV discovery, not the published reference. See the sweep result for what was actually called.
+These exact service/method/version combinations were advertised by the TV but do not appear in the reference snapshot above. Their authentication levels below are from TV discovery, not the published reference. The sweep results are historical; methods have since been added to the library.
 
 
 ### accessControl
 
 | Method | Version | TV auth | Implementation | Sweep result |
 | --- | --- | --- | --- | --- |
-| `actRegister` | 1.0 | none | Not implemented | Not invoked: may change state |
-| `getMethodTypes` | 1.0 | none | Not implemented | Raw discovery pass |
-| `getVersions` | 1.0 | none | Not implemented | Raw discovery pass |
+| `actRegister` | 1.0 | none | [`ActRegister`](api/src/access_control.rs) | Not invoked: may change state |
+| `getMethodTypes` | 1.0 | none | [`GetMethodTypes`](api/src/discovery.rs) | Raw discovery pass |
+| `getVersions` | 1.0 | none | [`GetVersions`](api/src/discovery.rs) | Raw discovery pass |
 
 ### appControl
 
 | Method | Version | TV auth | Implementation | Sweep result |
 | --- | --- | --- | --- | --- |
-| `getMethodTypes` | 1.0 | none | Not implemented | Raw discovery pass |
-| `getVersions` | 1.0 | none | Not implemented | Raw discovery pass |
+| `getMethodTypes` | 1.0 | none | [`GetMethodTypes`](api/src/discovery.rs) | Raw discovery pass |
+| `getVersions` | 1.0 | none | [`GetVersions`](api/src/discovery.rs) | Raw discovery pass |
 
 ### audio
 
 | Method | Version | TV auth | Implementation | Sweep result |
 | --- | --- | --- | --- | --- |
-| `getMethodTypes` | 1.0 | none | Not implemented | Raw discovery pass |
-| `getSoundSettings` | 1.1 | none | Not implemented | Raw pass |
-| `getVersions` | 1.0 | none | Not implemented | Raw discovery pass |
+| `getMethodTypes` | 1.0 | none | [`GetMethodTypes`](api/src/discovery.rs) | Typed pass |
+| `getSoundSettings` | 1.1 | none | [`GetSoundSettings`](api/src/audio.rs) | Typed pass |
+| `getVersions` | 1.0 | none | [`GetVersions`](api/src/discovery.rs) | Typed pass |
 
 ### avContent
 
 | Method | Version | TV auth | Implementation | Sweep result |
 | --- | --- | --- | --- | --- |
-| `deleteContent` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `getContentList` | 1.0 | private | Not implemented | Raw pass |
-| `getContentList` | 1.2 | private | Not implemented | Raw pass |
-| `getFavoriteList` | 1.0 | private | Not implemented | Raw pass |
-| `getMethodTypes` | 1.0 | none | Not implemented | Raw discovery pass |
-| `getParentalRatingSettings` | 1.0 | generic | Not implemented | Raw pass |
-| `getVersions` | 1.0 | none | Not implemented | Raw discovery pass |
-| `setDeleteProtection` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `setFavoriteContentList` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `setPlayTvContent` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `setPlayTvContent` | 1.1 | generic | Not implemented | Not invoked: may change state |
-| `setTvContentVisibility` | 1.0 | generic | Not implemented | Not invoked: may change state |
+| `deleteContent` | 1.0 | generic | [`DeleteContent`](api/src/av_content.rs) | Not invoked: may change state |
+| `getContentList` | 1.0 | private | [`GetContentListV1_0`](api/src/av_content.rs) | Typed pass |
+| `getContentList` | 1.2 | private | [`GetContentListV1_2`](api/src/av_content.rs) | Typed pass |
+| `getFavoriteList` | 1.0 | private | [`GetFavoriteList`](api/src/av_content.rs) | Typed pass |
+| `getMethodTypes` | 1.0 | none | [`GetMethodTypes`](api/src/discovery.rs) | Raw discovery pass |
+| `getParentalRatingSettings` | 1.0 | generic | [`GetParentalRatingSettings`](api/src/av_content.rs) | Typed pass |
+| `getVersions` | 1.0 | none | [`GetVersions`](api/src/discovery.rs) | Raw discovery pass |
+| `setDeleteProtection` | 1.0 | generic | [`SetDeleteProtection`](api/src/av_content.rs) | Not invoked: may change state |
+| `setFavoriteContentList` | 1.0 | generic | [`SetFavoriteContentList`](api/src/av_content.rs) | Not invoked: may change state |
+| `setPlayTvContent` | 1.0 | generic | [`SetPlayTvContent`](api/src/av_content.rs) | Not invoked: may change state |
+| `setPlayTvContent` | 1.1 | generic | [`SetPlayTvContentV1_1`](api/src/av_content.rs) | Not invoked: may change state |
+| `setTvContentVisibility` | 1.0 | generic | [`SetTvContentVisibility`](api/src/av_content.rs) | Not invoked: may change state |
 
 ### browser
 
 | Method | Version | TV auth | Implementation | Sweep result |
 | --- | --- | --- | --- | --- |
-| `actBrowserControl` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `getMethodTypes` | 1.0 | none | Not implemented | Raw discovery pass |
-| `getTextUrl` | 1.0 | private | Not implemented | Skipped: private text/URL |
-| `getVersions` | 1.0 | none | Not implemented | Raw discovery pass |
-| `setTextUrl` | 1.0 | generic | Not implemented | Not invoked: may change state |
+| `actBrowserControl` | 1.0 | generic | [`ActBrowserControl`](api/src/browser.rs) | Not invoked: may change state |
+| `getMethodTypes` | 1.0 | none | [`GetMethodTypes`](api/src/discovery.rs) | Raw discovery pass |
+| `getTextUrl` | 1.0 | private | [`GetTextUrl`](api/src/browser.rs) | Skipped: private text/URL |
+| `getVersions` | 1.0 | none | [`GetVersions`](api/src/discovery.rs) | Raw discovery pass |
+| `setTextUrl` | 1.0 | generic | [`SetTextUrl`](api/src/browser.rs) | Not invoked: may change state |
 
 ### cec
 
 | Method | Version | TV auth | Implementation | Sweep result |
 | --- | --- | --- | --- | --- |
-| `getMethodTypes` | 1.0 | none | Not implemented | Raw discovery pass |
-| `getVersions` | 1.0 | none | Not implemented | Raw discovery pass |
-| `setCecControlMode` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `setMhlAutoInputChangeMode` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `setMhlPowerFeedMode` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `setPowerSyncMode` | 1.0 | generic | Not implemented | Not invoked: may change state |
+| `getMethodTypes` | 1.0 | none | [`GetMethodTypes`](api/src/discovery.rs) | Raw discovery pass |
+| `getVersions` | 1.0 | none | [`GetVersions`](api/src/discovery.rs) | Raw discovery pass |
+| `setCecControlMode` | 1.0 | generic | [`SetCecControlMode`](api/src/cec.rs) | Not invoked: may change state |
+| `setMhlAutoInputChangeMode` | 1.0 | generic | [`SetMhlAutoInputChangeMode`](api/src/cec.rs) | Not invoked: may change state |
+| `setMhlPowerFeedMode` | 1.0 | generic | [`SetMhlPowerFeedMode`](api/src/cec.rs) | Not invoked: may change state |
+| `setPowerSyncMode` | 1.0 | generic | [`SetPowerSyncMode`](api/src/cec.rs) | Not invoked: may change state |
 
 ### encryption
 
 | Method | Version | TV auth | Implementation | Sweep result |
 | --- | --- | --- | --- | --- |
-| `getMethodTypes` | 1.0 | none | Not implemented | Raw discovery pass |
-| `getVersions` | 1.0 | none | Not implemented | Raw discovery pass |
+| `getMethodTypes` | 1.0 | none | [`GetMethodTypes`](api/src/discovery.rs) | Raw discovery pass |
+| `getVersions` | 1.0 | none | [`GetVersions`](api/src/discovery.rs) | Raw discovery pass |
 
 ### guide
 
 | Method | Version | TV auth | Implementation | Sweep result |
 | --- | --- | --- | --- | --- |
-| `getMethodTypes` | 1.0 | none | Not implemented | Raw discovery pass |
-| `getServiceProtocols` | 1.0 | none | Not implemented | Raw pass: `results` envelope |
-| `getVersions` | 1.0 | none | Not implemented | Raw discovery pass |
+| `getMethodTypes` | 1.0 | none | [`GetMethodTypes`](api/src/discovery.rs) | Raw discovery pass |
+| `getServiceProtocols` | 1.0 | none | [`GetServiceProtocols`](api/src/guide.rs) | Typed pass |
+| `getVersions` | 1.0 | none | [`GetVersions`](api/src/discovery.rs) | Raw discovery pass |
 
 ### system
 
 | Method | Version | TV auth | Implementation | Sweep result |
 | --- | --- | --- | --- | --- |
-| `getDeviceMode` | 1.0 | generic | Not implemented | TV error 3: Illegal Argument |
-| `getMethodTypes` | 1.0 | none | Not implemented | Raw discovery pass |
-| `getStorageList` | 1.1 | generic | Not implemented | TV error 7: Illegal State |
-| `getVersions` | 1.0 | none | Not implemented | Raw discovery pass |
-| `mountStorage` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `setDeviceMode` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `setLanguage` | 1.0 | generic | Not implemented | Not invoked: may change state |
+| `getDeviceMode` | 1.0 | generic | [`GetDeviceMode`](api/src/system.rs) | TV error 3: Illegal Argument |
+| `getMethodTypes` | 1.0 | none | [`GetMethodTypes`](api/src/discovery.rs) | Raw discovery pass |
+| `getStorageList` | 1.1 | generic | [`GetStorageList`](api/src/system.rs) | TV error 7: Illegal State |
+| `getVersions` | 1.0 | none | [`GetVersions`](api/src/discovery.rs) | Raw discovery pass |
+| `mountStorage` | 1.0 | generic | [`MountStorage`](api/src/system.rs) | Not invoked: may change state |
+| `setDeviceMode` | 1.0 | generic | [`SetDeviceMode`](api/src/system.rs) | Not invoked: may change state |
+| `setLanguage` | 1.0 | generic | [`SetLanguage`](api/src/system.rs) | Not invoked: may change state |
 
 ### video
 
 | Method | Version | TV auth | Implementation | Sweep result |
 | --- | --- | --- | --- | --- |
-| `getMethodTypes` | 1.0 | none | Not implemented | Raw discovery pass |
-| `getVersions` | 1.0 | none | Not implemented | Raw discovery pass |
+| `getMethodTypes` | 1.0 | none | [`GetMethodTypes`](api/src/discovery.rs) | Raw discovery pass |
+| `getVersions` | 1.0 | none | [`GetVersions`](api/src/discovery.rs) | Raw discovery pass |
 
 ### videoScreen
 
 | Method | Version | TV auth | Implementation | Sweep result |
 | --- | --- | --- | --- | --- |
-| `getAudioSourceScreen` | 1.0 | none | Not implemented | Raw pass |
-| `getBannerMode` | 1.0 | none | Not implemented | Raw pass |
-| `getMethodTypes` | 1.0 | none | Not implemented | Raw discovery pass |
-| `getMultiScreenMode` | 1.1 | none | Not implemented | Raw pass |
-| `getPipSubScreenPosition` | 1.0 | none | Not implemented | Raw pass |
-| `getVersions` | 1.0 | none | Not implemented | Raw discovery pass |
-| `requestToNotifyScreenState` | 1.1 | none | Not implemented | Not invoked: may change state |
-| `setAudioSourceScreen` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `setBannerMode` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `setMultiScreenMode` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `setPapScreenSize` | 1.0 | generic | Not implemented | Not invoked: may change state |
-| `setPipSubScreenPosition` | 1.0 | generic | Not implemented | Not invoked: may change state |
+| `getAudioSourceScreen` | 1.0 | none | [`GetAudioSourceScreen`](api/src/video_screen.rs) | Typed pass |
+| `getBannerMode` | 1.0 | none | [`GetBannerMode`](api/src/video_screen.rs) | Typed pass |
+| `getMethodTypes` | 1.0 | none | [`GetMethodTypes`](api/src/discovery.rs) | Raw discovery pass |
+| `getMultiScreenMode` | 1.1 | none | [`GetMultiScreenMode`](api/src/video_screen.rs) | Typed pass |
+| `getPipSubScreenPosition` | 1.0 | none | [`GetPipSubScreenPosition`](api/src/video_screen.rs) | Typed pass |
+| `getVersions` | 1.0 | none | [`GetVersions`](api/src/discovery.rs) | Raw discovery pass |
+| `requestToNotifyScreenState` | 1.1 | none | [`RequestToNotifyScreenState`](api/src/video_screen.rs) | Not invoked: may change state |
+| `setAudioSourceScreen` | 1.0 | generic | [`SetAudioSourceScreen`](api/src/video_screen.rs) | Not invoked: may change state |
+| `setBannerMode` | 1.0 | generic | [`SetBannerMode`](api/src/video_screen.rs) | Not invoked: may change state |
+| `setMultiScreenMode` | 1.0 | generic | [`SetMultiScreenMode`](api/src/video_screen.rs) | Not invoked: may change state |
+| `setPapScreenSize` | 1.0 | generic | [`SetPapScreenSize`](api/src/video_screen.rs) | Not invoked: may change state |
+| `setPipSubScreenPosition` | 1.0 | generic | [`SetPipSubScreenPosition`](api/src/video_screen.rs) | Not invoked: may change state |
 
 The TV’s `avContent/getFavoriteList` returned four favorite sources; a one-item content query for each was empty, so the result does not establish app-favorites support.
 
