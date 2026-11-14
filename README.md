@@ -79,6 +79,22 @@ so the key travels over the network unencrypted; use it on a trusted network.
 It reports transport, HTTP, Sony API, and response decoding errors. The host-only
 HTTP dependency is confined to the `sony-bravia-reqwest` crate.
 
+The host remote example supports state inspection and explicit control:
+
+```sh
+cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 power
+cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 audio
+cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 inputs
+cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 mute on
+cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 volume speaker 20
+cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 power on
+cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 input 'extInput:hdmi?port=1'
+```
+
+Use `mute off`, `power off`, or `volume headphone LEVEL` as needed. `playing`
+and `wol` read the current content and Wake-on-LAN setting where supported. The
+input command accepts a URI reported by `inputs`; availability depends on the TV.
+
 For a wider read-only compatibility check, run:
 
 ```sh
