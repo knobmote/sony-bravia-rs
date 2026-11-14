@@ -2,6 +2,136 @@
 
 use super::*;
 
+/// Query a device-specific mode by its value name.
+#[derive(Clone, Debug, Serialize)]
+pub struct GetDeviceMode {
+    pub value: String,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct DeviceMode {
+    pub is_on: bool,
+}
+
+impl SonyBraviaTvCommand for GetDeviceMode {
+    const SERVICE: &str = "system";
+    const METHOD: &str = "getDeviceMode";
+    const VERSION: &str = "1.0";
+    type Params = Self;
+    type Response = DeviceMode;
+    fn params(&self) -> Option<Self::Params> {
+        Some(self.clone())
+    }
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        single(result)
+    }
+}
+
+/// Change a device-specific mode.
+#[derive(Clone, Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SetDeviceMode {
+    pub value: String,
+    pub is_on: bool,
+}
+
+impl SonyBraviaTvCommand for SetDeviceMode {
+    const SERVICE: &str = "system";
+    const METHOD: &str = "setDeviceMode";
+    const VERSION: &str = "1.0";
+    type Params = Self;
+    type Response = ();
+    fn params(&self) -> Option<Self::Params> {
+        Some(self.clone())
+    }
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        empty(result)
+    }
+}
+
+/// Mount a storage device using its URI.
+#[derive(Clone, Debug, Serialize)]
+pub struct MountStorage {
+    pub uri: String,
+}
+
+impl SonyBraviaTvCommand for MountStorage {
+    const SERVICE: &str = "system";
+    const METHOD: &str = "mountStorage";
+    const VERSION: &str = "1.0";
+    type Params = Self;
+    type Response = ();
+    fn params(&self) -> Option<Self::Params> {
+        Some(self.clone())
+    }
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        empty(result)
+    }
+}
+
+/// Query storage devices, optionally filtering by URI.
+#[derive(Clone, Debug, Default, Serialize)]
+pub struct GetStorageList {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uri: Option<String>,
+}
+
+/// Storage properties reported by the device; fields vary across models.
+#[derive(Clone, Debug, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct StorageInfo {
+    pub uri: String,
+    pub device_name: Option<String>,
+    pub volume_label: Option<String>,
+    pub permission: Option<String>,
+    pub position: Option<String>,
+    pub formattable: Option<String>,
+    pub mounted: Option<String>,
+    #[serde(rename = "wholeCapacityMB")]
+    pub whole_capacity_mb: Option<i64>,
+    #[serde(rename = "freeCapacityMB")]
+    pub free_capacity_mb: Option<i64>,
+    #[serde(rename = "systemAreaCapacityMB")]
+    pub system_area_capacity_mb: Option<i64>,
+    pub formatting: Option<String>,
+    pub is_available: Option<String>,
+}
+
+impl SonyBraviaTvCommand for GetStorageList {
+    const SERVICE: &str = "system";
+    const METHOD: &str = "getStorageList";
+    const VERSION: &str = "1.1";
+    type Params = Self;
+    type Response = Vec<StorageInfo>;
+    fn params(&self) -> Option<Self::Params> {
+        Some(self.clone())
+    }
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        single(result)
+    }
+}
+
+/// Change the display language using a device-supported language identifier.
+#[derive(Clone, Debug, Serialize)]
+pub struct SetLanguage {
+    pub language: String,
+}
+
+impl SonyBraviaTvCommand for SetLanguage {
+    const SERVICE: &str = "system";
+    const METHOD: &str = "setLanguage";
+    const VERSION: &str = "1.0";
+    type Params = Self;
+    type Response = ();
+    fn params(&self) -> Option<Self::Params> {
+        Some(self.clone())
+    }
+    fn decode_response(result: Vec<json::Value>) -> json::Result<Self::Response> {
+        empty(result)
+    }
+}
+
 /// Get the display's current power state.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct GetPowerStatus;

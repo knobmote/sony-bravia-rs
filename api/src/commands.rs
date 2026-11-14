@@ -208,6 +208,36 @@ mod tests {
 
     #[test]
     fn discovered_screen_status_shapes() {
+        check(
+            video_screen::SetMultiScreenMode {
+                mode: "single".into(),
+                option: Some(video_screen::MultiScreenModeOption {
+                    internet_tv_mode: Some(false),
+                }),
+            },
+            "setMultiScreenMode",
+            "1.0",
+            json::json!([{"mode":"single","option":{"internetTVMode":false}}]),
+            json::json!([]),
+        );
+        let storage = check(
+            system::GetStorageList::default(),
+            "getStorageList",
+            "1.1",
+            json::json!([{}]),
+            json::json!([[{"uri":"storage:usb","wholeCapacityMB":1024,"freeCapacityMB":512}]]),
+        );
+        assert_eq!(storage[0].whole_capacity_mb, Some(1024));
+        let mode = check(
+            system::GetDeviceMode {
+                value: "sample".into(),
+            },
+            "getDeviceMode",
+            "1.0",
+            json::json!([{"value":"sample"}]),
+            json::json!([{"isOn":true}]),
+        );
+        assert!(mode.is_on);
         let banner = check(
             video_screen::GetBannerMode,
             "getBannerMode",
