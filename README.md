@@ -28,7 +28,7 @@ Each pending request retains its command type and checks the response ID. IDs
 are unique within a client instance and are not reused after exhaustion; keep
 pending requests associated with the client/connection that prepared them.
 
-Both crates support `no_std` and require `alloc`. Embedded applications must
+The API and sans-I/O crates support `no_std` and require `alloc`. Embedded applications must
 provide a global allocator; standard Rust applications can use the same crates
 without additional configuration. Response bodies and parsed values allocate,
 so transports should limit response sizes to fit the device's memory.
@@ -37,8 +37,47 @@ To check the libraries for the ESP32-S31 bare-metal target:
 
 ```sh
 rustup target add riscv32imafc-unknown-none-elf
-cargo check --workspace --target riscv32imafc-unknown-none-elf
+cargo check -p sony-bravia-api -p sony-bravia-client --target riscv32imafc-unknown-none-elf
 ```
+
+## HTTP client for a computer
+
+`sony-bravia-reqwest` provides an async, `std`-based HTTP client over the
+sans-I/O client. It works with any command defined by the API crate:
+
+```rust,no_run
+use sony_bravia_api::system::GetPowerStatus;
+use sony_bravia_reqwest::Client;
+
+# async fn example() -> Result<(), sony_bravia_reqwest::Error> {
+let mut tv = Client::new("http://192.168.1.100", Some("your-pre-shared-key"))?;
+let power = tv.execute(GetPowerStatus).await?;
+println!("{power:?}");
+# Ok(())
+# }
+```
+
+The client executes one request at a time, uses a ten-second timeout, and
+limits response bodies to 1 MiB by default; `set_max_response_bytes` changes
+the limit. It disables redirects and proxies. This implementation currently
+supports HTTP and optional pre-shared-key authentication; other authentication
+methods are not implemented. It requires a Tokio runtime.
+
+## Check a real TV from a computer
+
+Enable IP control on the TV and, if required, configure a pre-shared key in its
+network settings. Run this read-only power-status example on the same network,
+substituting the TV's address and key:
+
+```sh
+export BRAVIA_PSK='your-pre-shared-key'
+cargo run -p sony-bravia-reqwest --example tv_power_status -- http://192.168.1.100
+```
+
+Omit `BRAVIA_PSK` if the TV does not require a key. The example uses plain HTTP,
+so the key travels over the network unencrypted; use it on a trusted network.
+It reports transport, HTTP, Sony API, and response decoding errors. The host-only
+HTTP dependency is confined to the `sony-bravia-reqwest` crate.
 
 Support varies by display, firmware, region, and authentication level. Some
 professional-display APIs are localhost-only. The command definitions do not yet
