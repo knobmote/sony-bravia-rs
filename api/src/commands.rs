@@ -453,7 +453,6 @@ mod tests {
     }
 
     #[test]
-
     fn device_controls_and_scalar_parameters() {
         assert_eq!(audio::SetAudioMute::SERVICE, "audio");
         assert_eq!(av_content::SetPlayContent::SERVICE, "avContent");
