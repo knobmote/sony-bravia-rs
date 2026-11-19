@@ -127,7 +127,7 @@ cover every method or version in Sony's reference.
 ## GUITION board development
 
 The separate [firmware package](firmware/README.md) contains the ESP32-S31
-boot diagnostic and Wi-Fi compile probe. It has its own pinned compiler,
+local diagnostics, Wi-Fi bring-up and a volume/mute remote. It has its own pinned compiler,
 lockfile and target configuration; the host workspace remains host-only.
 Progress and hardware acceptance are tracked in the
 [embedded bring-up plan](openspec/changes/embedded-remote-bringup/tasks.md).
