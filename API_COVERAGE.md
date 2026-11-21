@@ -49,7 +49,7 @@ The [real-TV method sweep](docs/TV_API_SWEEP.md) records every advertised signat
 | [`getVolumeInformation`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2134) | 1.0 | none | [`GetVolumeInformation`](api/src/audio.rs) | Yes (none) | Pass |
 | [`setAudioMute`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2130) | 1.0 | generic | [`SetAudioMute`](api/src/audio.rs) | Yes (generic) | Pass |
 | [`setAudioVolume`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2119) | 1.2 | generic | [`SetAudioVolumeV1_2`](api/src/audio.rs) | Yes (generic) | Not tested |
-| [`setSoundSettings`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2113) | 1.1 | generic | [`SetSoundSettings`](api/src/audio.rs) | Yes (generic) | Not tested |
+| [`setSoundSettings`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2113) | 1.1 | generic | [`SetSoundSettings`](api/src/audio.rs) | Yes (generic) | Pass |
 | [`setSpeakerSettings`](https://pro-bravia.sony.net/remote-display-control/rest-api/reference/#article-2105) | 1.0 | generic | [`SetSpeakerSettings`](api/src/audio.rs) | Yes (generic) | Not tested |
 
 ### avContent
@@ -131,6 +131,7 @@ The [real-TV method sweep](docs/TV_API_SWEEP.md) records every advertised signat
 
 - Authenticated typed read-only validator: 39/42 succeeded (including bounded source browsing). `getPlayingContentInfo` and `getSceneSetting` returned `IllegalState`; `getScreenRotation` returned `NoSuchMethod`.
 - Authenticated state-changing checks: mute on/off, volume 22 → 21 → 22, and power standby → active succeeded; audio was restored. Two app activations (Netflix and YouTube) were visually confirmed.
+- A later typed audio check used `setSoundSettings` 1.1 to select TV Speakers and restore Audio System. Signed `setAudioVolume` 1.0 writes gave a settled 30 → 31 → 30 on the internal speakers and 14 → 16 → 14 on the eARC soundbar. Early eARC reads briefly returned 15. [Bench evidence](openspec/changes/design-knob-remote/tasks.md#signed-volume-trial)
 - Input enumeration and content browsing succeeded; input switching was not tried because the original input could not be reliably determined for restoration. No prolonged deep-standby or Wake-on-LAN packet test was performed.
 - TV app icons are served over HTTP; sample downloads succeeded without authentication. The observed icon `Content-Type` header was malformed, despite valid PNG data.
 
