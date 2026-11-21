@@ -2,11 +2,13 @@
 
 use std::env;
 use std::error::Error;
+use std::num::NonZeroI32;
 
 use sony_bravia_api::app_control::GetApplicationList;
 use sony_bravia_api::app_control::GetApplicationStatusList;
 use sony_bravia_api::app_control::SetActiveApp;
 use sony_bravia_api::audio::AudioTarget;
+use sony_bravia_api::audio::GetSoundSettings;
 use sony_bravia_api::audio::GetVolumeInformation;
 use sony_bravia_api::audio::SetAudioMute;
 use sony_bravia_api::audio::SetAudioVolume;
@@ -19,14 +21,16 @@ use sony_bravia_api::system::GetWolMode;
 use sony_bravia_api::system::SetPowerStatus;
 use sony_bravia_reqwest::Client;
 
-const USAGE: &str = "usage: tv_remote URL power [on|off] | audio | mute on|off | volume speaker|headphone LEVEL | inputs | input URI | playing | wol | apps | app-status | app URI";
+const USAGE: &str = "usage: tv_remote URL power [on|off] | audio | audio-output | mute on|off | volume speaker|headphone LEVEL | volume-step speaker|headphone SIGNED_STEPS | inputs | input URI | playing | wol | apps | app-status | app URI";
+const OUTPUT_TERMINAL: &str = "outputTerminal";
 
 #[derive(Debug)]
 enum Command {
     Power(Option<bool>),
     Audio,
+    AudioOutput,
     Mute(bool),
-    Volume(AudioTarget, u32),
+    Volume(AudioTarget, Volume),
     Inputs,
     Input(String),
     Playing,
@@ -45,18 +49,31 @@ fn parse_command(args: &[String]) -> Result<Command, &'static str> {
             _ => Err(USAGE),
         },
         [command] if command == "audio" => Ok(Command::Audio),
+        [command] if command == "audio-output" => Ok(Command::AudioOutput),
         [command, value] if command == "mute" => match value.as_str() {
             "on" => Ok(Command::Mute(true)),
             "off" => Ok(Command::Mute(false)),
             _ => Err(USAGE),
         },
-        [command, target, value] if command == "volume" => {
+        [command, target, value] if matches!(command.as_str(), "volume" | "volume-step") => {
             let target = match target.as_str() {
                 "speaker" => AudioTarget::Speaker,
                 "headphone" => AudioTarget::Headphone,
                 _ => return Err(USAGE),
             };
-            let volume = value.parse().map_err(|_| USAGE)?;
+            let volume = if command == "volume" {
+                Volume::Absolute(value.parse().map_err(|_| USAGE)?)
+            } else {
+                if !value.starts_with(['+', '-']) {
+                    return Err(USAGE);
+                }
+                let steps = value.parse::<NonZeroI32>().map_err(|_| USAGE)?;
+                if steps.get() > 0 {
+                    Volume::Increase(steps.get().unsigned_abs())
+                } else {
+                    Volume::Decrease(steps.get().unsigned_abs())
+                }
+            };
             Ok(Command::Volume(target, volume))
         }
         [command] if command == "inputs" => Ok(Command::Inputs),
@@ -88,14 +105,21 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 );
             }
         }
+        Command::AudioOutput => {
+            let settings = client
+                .execute(GetSoundSettings {
+                    target: Some(OUTPUT_TERMINAL.to_owned()),
+                })
+                .await?;
+            let output = settings
+                .into_iter()
+                .find(|setting| setting.target == OUTPUT_TERMINAL)
+                .ok_or("TV did not report an audio output terminal")?;
+            println!("{}", output.current_value);
+        }
         Command::Mute(status) => client.execute(SetAudioMute { status }).await?,
         Command::Volume(target, volume) => {
-            client
-                .execute(SetAudioVolume {
-                    target,
-                    volume: Volume::Absolute(volume),
-                })
-                .await?
+            client.execute(SetAudioVolume { target, volume }).await?
         }
         Command::Inputs => {
             for input in client.execute(GetCurrentExternalInputsStatus).await? {
@@ -147,7 +171,19 @@ mod tests {
         ));
         assert!(matches!(
             parse_command(&args(&["volume", "speaker", "20"])),
-            Ok(Command::Volume(AudioTarget::Speaker, 20))
+            Ok(Command::Volume(AudioTarget::Speaker, Volume::Absolute(20)))
+        ));
+        assert!(matches!(
+            parse_command(&args(&["volume-step", "speaker", "+1"])),
+            Ok(Command::Volume(AudioTarget::Speaker, Volume::Increase(1)))
+        ));
+        assert!(matches!(
+            parse_command(&args(&["volume-step", "headphone", "-1"])),
+            Ok(Command::Volume(AudioTarget::Headphone, Volume::Decrease(1)))
+        ));
+        assert!(matches!(
+            parse_command(&args(&["audio-output"])),
+            Ok(Command::AudioOutput)
         ));
         assert!(matches!(
             parse_command(&args(&["input", "extInput:hdmi?port=1"])),
@@ -165,6 +201,9 @@ mod tests {
         for values in [
             &["power", "toggle"][..],
             &["volume", "speaker", "-1"],
+            &["volume-step", "speaker", "1"],
+            &["volume-step", "speaker", "+0"],
+            &["volume-step", "speaker", "-0"],
             &["mute"],
             &["input", ""],
             &["app", ""],

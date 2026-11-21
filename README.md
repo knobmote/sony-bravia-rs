@@ -88,14 +88,19 @@ The host remote example supports state inspection and explicit control:
 ```sh
 cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 power
 cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 audio
+cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 audio-output
 cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 inputs
 cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 mute on
 cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 volume speaker 20
+cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 volume-step speaker +1
 cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 power on
 cargo run -p sony-bravia-reqwest --example tv_remote -- http://192.168.1.100 input 'extInput:hdmi?port=1'
 ```
 
-Use `mute off`, `power off`, or `volume headphone LEVEL` as needed. `playing`
+Use `mute off`, `power off`, or `volume headphone LEVEL` as needed.
+`audio-output` reads the active terminal where supported. `volume-step`
+sends a signed adjustment such as `+1` or `-1`. The effective volume change
+depends on the TV and the selected audio output. `playing`
 and `wol` read the current content and Wake-on-LAN setting where supported. The
 input command accepts a URI reported by `inputs`; availability depends on the TV.
 
