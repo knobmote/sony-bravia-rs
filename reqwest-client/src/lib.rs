@@ -78,7 +78,7 @@ impl Client {
             .post(url)
             .header("content-type", "application/json");
         if let Some(psk) = &self.psk {
-            request = request.header("X-Auth-PSK", psk.clone());
+            request = request.header("X-Auth-PSK", psk);
         }
         let mut response = request.body(pending.body().to_owned()).send().await?;
         let status = response.status().as_u16();

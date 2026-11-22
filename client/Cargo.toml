@@ -6,10 +6,12 @@ edition.workspace = true
 repository.workspace = true
 license.workspace = true
 
+
 [dependencies]
-sony-bravia-api = { path = "../api", version = "0.1.0" }
+sony-bravia-api.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
+
 
 [lints]
 workspace = true

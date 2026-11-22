@@ -28,9 +28,10 @@ let power = request.complete(status, body)?;
 # Ok::<(), sony_bravia_client::Error>(())
 ```
 
-Each pending request retains its command type and checks the response ID. IDs
-are unique within a client instance and are not reused after exhaustion; keep
-pending requests associated with the client/connection that prepared them.
+Each pending request retains its command type and checks the response ID.
+IDs advance from 1 through `i32::MAX` and then wrap to 1. Keep pending
+requests associated with the connection that prepared them and retire each
+request before its ID can be reused.
 
 The API and sans-I/O crates support `no_std` and require `alloc`. Embedded applications must
 provide a global allocator; standard Rust applications can use the same crates

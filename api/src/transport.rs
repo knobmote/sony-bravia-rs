@@ -70,8 +70,7 @@ impl Response {
 
     pub fn id(&self) -> NonZeroI32 {
         match self {
-            Self::Success { id, .. } => *id,
-            Self::Failure { id, .. } => *id,
+            Self::Success { id, .. } | Self::Failure { id, .. } => *id,
         }
     }
 

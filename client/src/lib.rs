@@ -15,24 +15,26 @@ use alloc::vec::Vec;
 use core::fmt;
 use core::marker::PhantomData;
 use core::num::NonZeroI32;
+use core::num::NonZeroU32;
 
-use sony_bravia_api::Request;
-use sony_bravia_api::Response;
-use sony_bravia_api::SonyBraviaTvCommand;
+use serde_json as json;
+use sony_bravia_api as api;
 
-/// Prepares requests with unique positive IDs for one client instance.
+const FIRST_REQUEST_ID: NonZeroI32 = NonZeroU32::MIN.cast_signed();
+
+/// Prepares requests with sequential positive IDs.
 ///
-/// IDs are not reused: create a new client when the ID space is exhausted, and
-/// keep each client's pending requests associated with its own connection.
+/// The counter wraps from `i32::MAX` to 1. Keep pending requests associated
+/// with their connection and retire each request before its ID can be reused.
 #[derive(Debug)]
 pub struct Client {
-    next_id: Option<NonZeroI32>,
+    next_id: NonZeroI32,
 }
 
 impl Default for Client {
     fn default() -> Self {
         Self {
-            next_id: NonZeroI32::new(1),
+            next_id: FIRST_REQUEST_ID,
         }
     }
 }
@@ -46,19 +48,31 @@ impl Client {
     /// Prepare a command without performing I/O.
     ///
     /// # Errors
-    /// Returns an error if the ID space is exhausted or parameters cannot be serialized.
-    pub fn prepare<C: SonyBraviaTvCommand>(&mut self, command: C) -> Result<Pending<C>, Error> {
-        let id = self.next_id.ok_or(Error::IdsExhausted)?;
-        let body = Request::from_command(command, id)
+    /// Returns an error if parameters cannot be serialized.
+    pub fn prepare<C: api::SonyBraviaTvCommand>(
+        &mut self,
+        command: C,
+    ) -> Result<Pending<C>, Error> {
+        let id = self.next_id();
+        let body = api::Request::from_command(command, id)
             .and_then(|request| request.to_json())
             .map_err(Error::Encode)?;
-        self.next_id = id.get().checked_add(1).and_then(NonZeroI32::new);
         Ok(Pending {
             id,
             path: format!("/sony/{}", C::SERVICE),
             body,
             command: PhantomData,
         })
+    }
+
+    fn next_id(&mut self) -> NonZeroI32 {
+        let id = self.next_id;
+        self.next_id = id
+            .get()
+            .checked_add(1)
+            .and_then(NonZeroI32::new)
+            .unwrap_or(FIRST_REQUEST_ID);
+        id
     }
 }
 
@@ -71,7 +85,7 @@ pub struct Pending<C> {
     command: PhantomData<fn() -> C>,
 }
 
-impl<C: SonyBraviaTvCommand> Pending<C> {
+impl<C: api::SonyBraviaTvCommand> Pending<C> {
     /// The request ID, for diagnostics or transport correlation.
     pub fn id(&self) -> NonZeroI32 {
         self.id
@@ -95,30 +109,28 @@ impl<C: SonyBraviaTvCommand> Pending<C> {
     /// # Errors
     /// Returns an HTTP, protocol, or device error if the request did not succeed.
     pub fn complete(&self, status: u16, body: &[u8]) -> Result<C::Response, Error> {
-        if status != 200 {
-            let device_error = match serde_json::from_slice::<Response>(body) {
-                Ok(response) => {
-                    self.check_id(response.id())?;
-                    match response {
-                        Response::Failure { error, .. } => Some(error),
-                        Response::Success { .. } => None,
-                    }
+        if status == 200 {
+            self.response(body)
+                .map_err(Error::Decode)??
+                .response::<C>()
+                .map_err(Error::Decode)?
+                .map_err(Error::Device)
+        } else {
+            let device_error = if let Ok(response) = self.response(body) {
+                match response? {
+                    api::Response::Success { .. } => None,
+                    api::Response::Failure { error, .. } => Some(error),
                 }
-                Err(_) => None,
+            } else {
+                None
             };
-            return Err(Error::Http {
+
+            Err(Error::Http {
                 status,
                 body: body.to_vec(),
                 device_error,
-            });
+            })
         }
-
-        let response = serde_json::from_slice::<Response>(body).map_err(Error::Decode)?;
-        self.check_id(response.id())?;
-        response
-            .response::<C>()
-            .map_err(Error::Decode)?
-            .map_err(Error::Device)
     }
 
     fn check_id(&self, actual: NonZeroI32) -> Result<(), Error> {
@@ -131,17 +143,21 @@ impl<C: SonyBraviaTvCommand> Pending<C> {
             })
         }
     }
+
+    fn response(&self, body: &[u8]) -> json::Result<Result<api::Response, Error>> {
+        let response = json::from_slice::<api::Response>(body)?;
+        let response = self.check_id(response.id()).map(|_| response);
+        Ok(response)
+    }
 }
 
 /// Failure while preparing or interpreting a request.
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-    /// This client has used every positive request ID.
-    IdsExhausted,
     /// Command parameters could not be serialized.
-    Encode(#[source] serde_json::Error),
+    Encode(#[source] json::Error),
     /// The response body or command-specific result was invalid.
-    Decode(#[source] serde_json::Error),
+    Decode(#[source] json::Error),
     /// The response belongs to a different request.
     MismatchedId {
         expected: NonZeroI32,
@@ -161,7 +177,6 @@ pub enum Error {
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::IdsExhausted => write!(f, "request ID space exhausted"),
             Self::Encode(error) => write!(f, "failed to encode request: {error}"),
             Self::Decode(error) => write!(f, "failed to decode response: {error}"),
             Self::MismatchedId { expected, actual } => write!(
@@ -182,7 +197,7 @@ impl fmt::Display for Error {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use sony_bravia_api::ErrorCode;
+    // use sony_bravia_api::ErrorCode;
     use sony_bravia_api::audio::SetAudioMute;
     use sony_bravia_api::discovery::GetMethodTypes;
     use sony_bravia_api::discovery::service;
@@ -197,8 +212,8 @@ mod tests {
         assert_eq!(power.id().get(), 1);
         assert_eq!(power.path(), "/sony/system");
         assert_eq!(
-            serde_json::from_str::<serde_json::Value>(power.body()).unwrap(),
-            serde_json::json!({"id":1,"method":"getPowerStatus","params":[],"version":"1.0"})
+            json::from_str::<json::Value>(power.body()).unwrap(),
+            json::json!({"id":1,"method":"getPowerStatus","params":[],"version":"1.0"})
         );
         assert_eq!(mute.id().get(), 2);
         assert_eq!(mute.path(), "/sony/audio");
@@ -220,10 +235,10 @@ mod tests {
         let pending = Client::new().prepare(GetPowerStatus).unwrap();
         let error_body = br#"{"id":1,"error":[401,"Unauthorized"]}"#;
         assert!(
-            matches!(pending.complete(200, error_body), Err(Error::Device(error)) if error.code == ErrorCode::Unauthorized)
+            matches!(pending.complete(200, error_body), Err(Error::Device(error)) if error.code == api::ErrorCode::Unauthorized)
         );
         assert!(
-            matches!(pending.complete(401, error_body), Err(Error::Http { status: 401, device_error: Some(error), .. }) if error.code == ErrorCode::Unauthorized)
+            matches!(pending.complete(401, error_body), Err(Error::Http { status: 401, device_error: Some(error), .. }) if error.code == api::ErrorCode::Unauthorized)
         );
         assert!(
             matches!(pending.complete(503, b"unavailable"), Err(Error::Http { status: 503, body, device_error: None }) if body == b"unavailable")
@@ -266,15 +281,22 @@ mod tests {
     }
 
     #[test]
-    fn does_not_wrap_request_ids() {
+    fn wraps_request_ids_to_one_and_keeps_response_matching() {
         let mut client = Client {
-            next_id: NonZeroI32::new(i32::MAX),
+            next_id: NonZeroI32::MAX,
         };
-        let pending = client.prepare(GetPowerStatus).unwrap();
-        assert_eq!(pending.id().get(), i32::MAX);
+        let last = client.prepare(GetPowerStatus).unwrap();
+        let first = client.prepare(GetPowerStatus).unwrap();
+
+        assert_eq!(last.id().get(), i32::MAX);
+        assert_eq!(first.id().get(), 1);
+        assert_eq!(client.prepare(GetPowerStatus).unwrap().id().get(), 2);
+
+        let body = br#"{"id":1,"result":[{"status":"active"}]}"#;
+        assert_eq!(first.complete(200, body).unwrap(), PowerStatus::Active);
         assert!(matches!(
-            client.prepare(GetPowerStatus),
-            Err(Error::IdsExhausted)
+            last.complete(200, body),
+            Err(Error::MismatchedId { .. })
         ));
     }
 
