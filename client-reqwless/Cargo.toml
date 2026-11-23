@@ -1,0 +1,20 @@
+[package]
+name = "sony-bravia-reqwless"
+description = "Reqwless transport for Sony BRAVIA REST commands on embedded devices"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license.workspace = true
+
+[dependencies]
+embedded-io-async.workspace = true
+reqwless.workspace = true
+sony-bravia-api.workspace = true
+sony-bravia-client.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+embassy-futures.workspace = true
+
+[lints]
+workspace = true

@@ -4,6 +4,7 @@ use std::net::TcpListener;
 use std::thread;
 use std::time::Duration;
 
+use sony_bravia_api as api;
 use sony_bravia_api::audio::SetAudioMute;
 use sony_bravia_api::system::GetPowerStatus;
 use sony_bravia_api::system::PowerStatus;
@@ -98,6 +99,25 @@ async fn executes_different_commands_and_propagates_http_errors() {
         assert_eq!(json["id"], index + 1);
         assert_eq!(json["method"], method);
     }
+}
+
+#[tokio::test]
+async fn reports_sony_errors_in_http_success_and_validates_ids() {
+    let (url, server) = mock_server(vec![
+        (200, r#"{"id":1,"error":[401,"Unauthorized"]}"#),
+        (200, r#"{"id":3,"result":[{"status":"active"}]}"#),
+    ]);
+    let mut client = Client::new(&url, None).unwrap();
+    assert!(matches!(
+        client.execute(GetPowerStatus).await,
+        Err(Error::Protocol(ProtocolError::Device(error)))
+            if error.code == api::ErrorCode::Unauthorized
+    ));
+    assert!(matches!(
+        client.execute(GetPowerStatus).await,
+        Err(Error::Protocol(ProtocolError::MismatchedId { .. }))
+    ));
+    server.join().unwrap();
 }
 
 #[tokio::test]

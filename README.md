@@ -42,7 +42,7 @@ To check the libraries for the ESP32-S31 bare-metal target:
 
 ```sh
 rustup target add riscv32imafc-unknown-none-elf
-cargo check -p sony-bravia-api -p sony-bravia-client --target riscv32imafc-unknown-none-elf
+cargo +stable check -p sony-bravia-reqwless --target riscv32imafc-unknown-none-elf
 ```
 
 ## HTTP client for a computer
@@ -67,6 +67,40 @@ limits response bodies to 1 MiB by default; `set_max_response_bytes` changes
 the limit. It disables redirects and proxies. This implementation currently
 supports HTTP and optional pre-shared-key authentication; other authentication
 methods are not implemented. It requires a Tokio runtime.
+
+## HTTP client for embedded devices
+
+`sony-bravia-reqwless` provides the same typed command execution for
+`no_std` applications with a global allocator. Supply an asynchronous
+connection that implements `embedded_io_async::Read` and
+`embedded_io_async::Write`, and apply a deadline to the whole operation.
+
+```rust,no_run
+use core::future::ready;
+
+use embedded_io_async as io;
+
+use sony_bravia_api as api;
+use sony_bravia_reqwless as bravia;
+
+async fn read_power(
+    stream: impl io::Read + io::Write,
+) -> Result<api::system::PowerStatus, bravia::Error> {
+    let mut tv = bravia::Client::new();
+    tv.execute(
+        api::system::GetPowerStatus,
+        ready(Ok(stream)),
+        "192.168.1.100",
+        Some("your-pre-shared-key"),
+    )
+    .await
+}
+```
+
+You can also pass a future that opens the connection. The client prepares the
+request before polling it. Each exchange uses plain HTTP, sends
+`Connection: close`, and uses fixed request, header, and response buffers.
+Retain the client between commands to keep request IDs advancing.
 
 ## Check a real TV from a computer
 

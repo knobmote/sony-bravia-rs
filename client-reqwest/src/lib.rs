@@ -6,7 +6,9 @@ use reqwest::Url;
 use reqwest::header::HeaderValue;
 use reqwest::header::InvalidHeaderValue;
 use reqwest::redirect::Policy;
-use sony_bravia_api::SonyBraviaTvCommand;
+
+use sony_bravia_api as api;
+use sony_bravia_client as protocol;
 
 /// An HTTP client for one display. Requests are made sequentially per client.
 #[derive(Debug)]
@@ -14,7 +16,7 @@ pub struct Client {
     base_url: Url,
     psk: Option<HeaderValue>,
     http: reqwest::Client,
-    protocol: sony_bravia_client::Client,
+    protocol: protocol::Client,
     max_response_bytes: usize,
 }
 
@@ -52,7 +54,7 @@ impl Client {
             base_url,
             psk,
             http,
-            protocol: sony_bravia_client::Client::new(),
+            protocol: protocol::Client::new(),
             max_response_bytes: 1024 * 1024,
         })
     }
@@ -66,7 +68,7 @@ impl Client {
     ///
     /// # Errors
     /// Returns an error if preparation, HTTP transport, or response decoding fails.
-    pub async fn execute<C: SonyBraviaTvCommand>(
+    pub async fn execute<C: api::SonyBraviaTvCommand>(
         &mut self,
         command: C,
     ) -> Result<C::Response, Error> {
@@ -112,5 +114,5 @@ pub enum Error {
     ResponseTooLarge { limit: usize },
     /// The sans-I/O client could not prepare or interpret the request.
     #[error("BRAVIA request failed: {0}")]
-    Protocol(#[from] sony_bravia_client::Error),
+    Protocol(#[from] protocol::Error),
 }
