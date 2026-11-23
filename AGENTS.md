@@ -8,3 +8,16 @@ Follow [Rust Coding Standards](https://github.com/imp/rust-coding-standards/blob
 - Keep decoded Sony API values distinct from raw response bytes. Keep both the API and sans-I/O client usable from `no_std`, and apply dependency and lint conventions within each Cargo workspace.
 
 Use `curl` or `xh` for simple HTTP probes. Prefer Rust for more complex or reusable tooling.
+
+## Dependency rationale
+
+| Dependency | Purpose and rationale | Used by |
+| --- | --- | --- |
+| `embassy-futures` | Runs async transport tests with a small executor over in-memory streams. | `client-reqwless` tests |
+| `embedded-io-async` | Provides standard async byte-stream traits shared by embedded networking stacks. | `client-reqwless` |
+| `reqwest` | Provides host HTTP transport with configurable timeouts, redirects, and access to response chunks. | `client-reqwest` |
+| `reqwless` | Provides embedded HTTP framing over caller-supplied streams and fixed-size buffers. | `client-reqwless` |
+| `serde` | Derives typed Sony wire serialization and deserialization with allocation support on bare metal. | `api` |
+| `serde_json` | Encodes and decodes Sony JSON envelopes with `no_std + alloc` support. | `api`, `client`, and `client-reqwest` tests |
+| `thiserror` | Derives typed errors with source chaining, including on bare-metal targets. | All workspace crates |
+| `tokio` | Supplies the runtime for the host transport’s network I/O in examples and tests. | `client-reqwest` examples and tests |

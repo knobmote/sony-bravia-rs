@@ -11,11 +11,9 @@ license = "MIT"
 
 
 [workspace.dependencies]
-# Runs the reqwless transport tests with an in-memory stream.
 embassy-futures = { version = "0.1", default-features = false }
-# Provides a runtime-independent byte stream for the embedded transport.
 embedded-io-async = { version = "0.7", default-features = false }
-# Handles bounded HTTP framing on embedded devices.
+reqwest = { version = "0.13", default-features = false }
 reqwless = { version = "0.14", default-features = false }
 serde = { version = "1.0", default-features = false, features = [
     "alloc",
@@ -23,6 +21,7 @@ serde = { version = "1.0", default-features = false, features = [
 ] }
 serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
 thiserror = { version = "2.0", default-features = false }
+tokio = { version = "1.54", default-features = false }
 
 sony-bravia-api = { path = "./api", version = "0.1" }
 sony-bravia-client = { path = "./client", version = "0.1" }
